@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using System.IO;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System;
+using System.Threading;
 
 public class Menu : MonoBehaviour
 {
@@ -12,10 +14,6 @@ public class Menu : MonoBehaviour
     [SerializeField] GameObject enterName;
     [SerializeField] TMP_Text leaderboard;
     static string playerName = "";
-    public static string GetPlayerName()
-    {
-        return playerName;
-    }
     void Start()
     {
         Button btn = startGame.GetComponent<Button>();
@@ -27,19 +25,22 @@ public class Menu : MonoBehaviour
 
     void StartGame()
     {
-        playerName = enterName.GetComponent<TMP_InputField>().text;
-        if(!File.Exists(Constants.PLAYERS_FILE_NAME))
-        {
-            File.Create(Constants.PLAYERS_FILE_NAME);
-        }
-        using(StreamWriter sw = new StreamWriter(Constants.PLAYERS_FILE_NAME, append: true))
-        {
-            sw.WriteLine(playerName + "," + 0); //name,score
-        }
+        SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
 
-        SceneManager.LoadSceneAsync("GameScene", LoadSceneMode.Single);
+        Constants.SceneNames n;
+        int i = 10;
+        do{
+            Enum.TryParse(SceneManager.GetActiveScene().name, out n);
+            Debug.Log(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+            Thread.Sleep(500);
+            i--;
+        } while(n != Constants.SceneNames.GameScene && i > 0);
+
+        new GameSceneInit(playerName);
         return;
     }
+    
 
     void Update()
     {
