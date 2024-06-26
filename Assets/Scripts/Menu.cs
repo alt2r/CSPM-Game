@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using System.IO;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System;
+using System.Threading;
+using UnityEditor.Rendering;
 
 public class Menu : MonoBehaviour
 {
@@ -12,14 +15,14 @@ public class Menu : MonoBehaviour
     [SerializeField] GameObject enterName;
     [SerializeField] TMP_Text leaderboard;
     static string playerName = "";
+
     public static string GetPlayerName()
     {
         return playerName;
     }
     void Start()
     {
-        Button btn = startGame.GetComponent<Button>();
-        btn.onClick.AddListener(StartGame);
+        startGame.onClick.AddListener(StartGame);
 
         enterName.GetComponent<TMP_InputField>().onValueChanged.AddListener(OnTextChanged);
         PopulateLeaderboard();
@@ -28,16 +31,9 @@ public class Menu : MonoBehaviour
     void StartGame()
     {
         playerName = enterName.GetComponent<TMP_InputField>().text;
-        if(!File.Exists(Constants.PLAYERS_FILE_NAME))
-        {
-            File.Create(Constants.PLAYERS_FILE_NAME);
-        }
-        using(StreamWriter sw = new StreamWriter(Constants.PLAYERS_FILE_NAME, append: true))
-        {
-            sw.WriteLine(playerName + "," + 0); //name,score
-        }
-
         SceneManager.LoadSceneAsync("GameScene", LoadSceneMode.Single);
+
+
         return;
     }
 
@@ -56,23 +52,90 @@ public class Menu : MonoBehaviour
 
     void PopulateLeaderboard()
     {
-        string leaderboardText = "";
         if(!File.Exists(Constants.PLAYERS_FILE_NAME))
         {
             return;
         }
         using(StreamReader sr = new StreamReader(Constants.PLAYERS_FILE_NAME))
         {
-            string line = "";
-            while((line = sr.ReadLine()) != null)
+            string? line;
+            string[] splitString;
+            string textToAdd = "";
+            List<string[]> playersAndScores = new List<string[]>();
+            while ((line = sr.ReadLine()) != null)
             {
-                leaderboardText = leaderboardText + line + "\n";
+                splitString = line.Split(",");
+                playersAndScores.Add(splitString);
             }
+            List<string[]> sortedScores = mergeSort(playersAndScores);
+            int numberOfPlayersOnScoreBoard = 0;
+            for (int i = sortedScores.Count - 1; i >= 0 && numberOfPlayersOnScoreBoard < Constants.NUMBER_OF_LEADERBOARD_ENTRIES; i--)
+            {
+                textToAdd += $"{sortedScores[i][0]}: {sortedScores[i][1]} \n";
+                numberOfPlayersOnScoreBoard++;
+            }
+            leaderboard.text = textToAdd;
         }
 
-        leaderboard.text = leaderboardText;
 
+    }
 
+    public static List<string[]> mergeSort(List<string[]> array)
+    {
+        List<string[]> left = new List<string[]>();
+        List<string[]> right = new List<string[]>();
+        List<string[]> result;
+        if (array.Count <= 1)
+        {
+            return array;
+        }
+        int midPoint = array.Count / 2;;
+        for (int i = 0; i < midPoint; i++)
+        {
+            left.Add(array[i]);
+        }
+        int x = 0;
+        for (int i = midPoint; i < array.Count; i++)
+        {
+            right.Add(array[i]);
+            x++;
+        }
+        left = mergeSort(left);
+        right = mergeSort(right);
+        result = merge(left, right);
+        return result;
+    }
+    public static List<string[]> merge(List<string[]> left, List<string[]> right)
+    {
+        List<string[]> result = new List<string[]>();
+        int indexLeft = 0, indexRight = 0;
+        while (indexLeft < left.Count || indexRight < right.Count)
+        {  
+            if (indexLeft < left.Count && indexRight < right.Count)
+            {
+                if (Convert.ToInt32(left[indexLeft][1]) <= Convert.ToInt32(right[indexRight][1]))
+                {
+                    result.Add(left[indexLeft]);
+                    indexLeft++;
+                }
+                else
+                {
+                    result.Add(right[indexRight]);
+                    indexRight++;
+                }
+            }
+            else if (indexLeft < left.Count)
+            {
+                result.Add(left[indexLeft]);
+                indexLeft++;
+            }
+            else if (indexRight < right.Count)
+            {
+                result.Add(right[indexRight]);
+                indexRight++;
+            }
+        }
+        return result;
     }
     
 }

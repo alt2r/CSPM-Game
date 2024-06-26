@@ -5,6 +5,7 @@ using UnityEngine;
 public class BulletScript : MonoBehaviour
 {
     // Start is called before the first frame update
+    bool paused;
     void Start()
     {
         Rigidbody2D rb = gameObject.AddComponent<Rigidbody2D>();
@@ -16,6 +17,7 @@ public class BulletScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!paused)
         transform.Translate(new Vector2(Constants.BULLET_SPEED * Time.deltaTime, 0));
     }
 
@@ -24,5 +26,15 @@ public class BulletScript : MonoBehaviour
         Destroy(gameObject);
         Destroy(this);
         return;
+    }
+
+    public void Pause()
+    {
+        paused = true;
+    }
+
+    public void Resume()
+    {
+        paused = false;
     }
 }

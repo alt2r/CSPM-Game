@@ -12,79 +12,100 @@ public class Player
 {
     int score;
     int spendablePoints;
-    enum Upgrades
-    {
-        BURST_MODE,
-        SHOTGUN,
-        FULL_AUTO,
-        KNOCKBACK
-    }
+    float fireRate;
 
-    Dictionary<Upgrades, bool> hasUpgrade = new Dictionary<Upgrades, bool>(){
-        {Upgrades.BURST_MODE, false},
-        {Upgrades.SHOTGUN, false},
-        {Upgrades.FULL_AUTO, false},
-        {Upgrades.KNOCKBACK, false}
+    Dictionary<Constants.Upgrades, int> upgradeLevels = new Dictionary<Constants.Upgrades, int>(){
+        {Constants.Upgrades.BURST_MODE, 0},
+        {Constants.Upgrades.SHOTGUN, 0},
+        {Constants.Upgrades.FIRE_RATE, 0},
+        {Constants.Upgrades.KNOCKBACK, 0}
     };
     // Start is called before the first frame update
     private float lives = 0;
-    public static Player instance;
+    private static Player instance;
     private TMP_Text pointsDisplay;
     private TMP_Text livesDisplay;
-    public Player(TMP_Text pointsDisplay, TMP_Text livesDisplay)
+
+    private string playerName;
+    public Player(string playerName, TMP_Text pointsDisplay, TMP_Text livesDisplay)
     {
         lives = 5;
-        if(instance == null)
-        {
-            instance = this;
-            
-        }
+        fireRate = 4;
+        instance = this;
         this.pointsDisplay = pointsDisplay;
         this.livesDisplay = livesDisplay;
-        updatePointsDisplay();
-        updateLivesDisplay();
+        this.playerName = playerName;
+        UpdatePointsDisplay();
+        UpdateLivesDisplay();
     }
 
-    public void updatePointsDisplay()
+    public static Player GetInstance()
+    {
+        return instance;
+    }
+
+    public string GetPlayerName()
+    {
+        return playerName;
+    }
+    public float GetFireRate()
+    {
+        return fireRate;
+    }
+    public void SetFireRate(float fr)
+    {
+        fireRate = fr;
+    }
+
+    public void UpdatePointsDisplay()
     {
         pointsDisplay.text = Constants.POINTS_DISPLAY_TEXT + spendablePoints;
     }
 
-    public void updateLivesDisplay()
+    public void UpdateLivesDisplay()
     {
         livesDisplay.text = Constants.LIVES_DISPLAY_TEXT + lives;
     }
 
     // Update is called once per frame
-    public void incrementScores()
+    public void IncrementScores()
     {
         score++;
         spendablePoints++;
-        updatePointsDisplay();
+        UpdatePointsDisplay();
         return;
     }
 
-    public int getScore()
+    public int GetScore()
     {
         return score;
     }
 
-    public void updateHealth(float changeInHealth)
+    public void UpdateHealth(float changeInHealth)
     {
         lives += changeInHealth;
         if(lives <= 0)
         {
-        loseGame();
+        LoseGame();
         return;
         }
-        updateLivesDisplay();
+        UpdateLivesDisplay();
         return;
         
     }
 
-    private void loseGame()
+    public Dictionary<Constants.Upgrades, int> GetUpgradesDict()
+    {
+        return upgradeLevels;
+    }
+
+    public void increaseValueInUpgradesDict(Constants.Upgrades upgradeToLevelUp)
+    {
+        upgradeLevels[upgradeToLevelUp]++;
+    }
+
+    private void LoseGame()
     {
         SceneManager.LoadSceneAsync("GameOverScene", LoadSceneMode.Single);
-        instance = null; //remove this player
     }
 }

@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class TurretScript : MonoBehaviour
 {
     // Start is called before the first frame update
     float momentum = 0;
+    bool paused = false;
     [SerializeField]
     GameObject bulletGO;
 
-
-    float fireRate = 3;
     float shootCountdown = 0; //counts down to 0
     void Start()
     {
@@ -20,6 +20,10 @@ public class TurretScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(paused)
+        {
+            return;
+        }
         if(shootCountdown > 0)   //turret shoot cooldown
         shootCountdown -= Time.deltaTime;
 
@@ -73,7 +77,7 @@ public class TurretScript : MonoBehaviour
         }
 
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
             Shoot();
         }
@@ -82,19 +86,51 @@ public class TurretScript : MonoBehaviour
         
     }
 
+    public void Pause()
+    {
+        paused = true;
+    }
+
+    public void Resume()
+    {
+        paused = false;
+    }
+
 
     //IEnumerator Shoot()
     void Shoot()
     {
-        Player player = Player.instance;
+        Player player = Player.GetInstance();
         
         if(shootCountdown <= 0)
         {
-            shootCountdown = 1 / fireRate;
+            shootCountdown = 1 / player.GetFireRate();
             GameObject thisBullet = Instantiate(bulletGO);
             thisBullet.transform.position = transform.position;
+            if(player.GetUpgradesDict()[Constants.Upgrades.BURST_MODE] > 0)
+            {
+                StartCoroutine(BurstMode(player.GetUpgradesDict()[Constants.Upgrades.BURST_MODE]));
+            }
         }
         return;
 
+    }
+
+    IEnumerator BurstMode(int level)
+    {
+        int shot = 0;
+        bool firstRun = true;
+        while(shot < level)
+        {
+            if(firstRun)
+            {
+                firstRun = false; //so that there arent 2 bullets on top of each other
+                yield return new WaitForSeconds(Constants.BURST_MODE_TIME_BETWEEN_SHOTS);
+            }
+            shot++;
+            GameObject thisBullet = Instantiate(bulletGO);
+            thisBullet.transform.position = transform.position;
+            yield return new WaitForSeconds(Constants.BURST_MODE_TIME_BETWEEN_SHOTS);
+        }
     }
 }
