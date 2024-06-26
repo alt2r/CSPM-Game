@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 using TMPro;
 using UnityEditor.SearchService;
 using UnityEngine.SceneManagement;
-public class ControllerScript : MonoBehaviour
+public class Controller : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField]
@@ -25,10 +25,10 @@ public class ControllerScript : MonoBehaviour
     private float malwareRadius = 0.5f;
     private float timeDelay = 1.5f;
 
-     public void init(string playerName)
-     {
+    void Start()
+    {
         Player player = new Player(pointsDisplay, livesDisplay);
-        playerNameDisplay.text = playerName;
+        playerNameDisplay.text = Menu.GetPlayerName();
         StartCoroutine(SpawnMalware());
         return;
      }

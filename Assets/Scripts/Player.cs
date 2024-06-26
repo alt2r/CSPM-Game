@@ -33,10 +33,12 @@ public class Player
     private TMP_Text livesDisplay;
     public Player(TMP_Text pointsDisplay, TMP_Text livesDisplay)
     {
-        //instance = null;
-        instance = this;
         lives = 5;
+        if(instance == null)
+        {
+            instance = this;
             
+        }
         this.pointsDisplay = pointsDisplay;
         this.livesDisplay = livesDisplay;
         updatePointsDisplay();
@@ -83,5 +85,6 @@ public class Player
     private void loseGame()
     {
         SceneManager.LoadSceneAsync("GameOverScene", LoadSceneMode.Single);
+        instance = null; //remove this player
     }
 }
