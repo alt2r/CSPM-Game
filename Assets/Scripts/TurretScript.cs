@@ -86,6 +86,8 @@ public class TurretScript : MonoBehaviour
     //IEnumerator Shoot()
     void Shoot()
     {
+        Player player = Player.instance;
+        
         if(shootCountdown <= 0)
         {
             shootCountdown = 1 / fireRate;

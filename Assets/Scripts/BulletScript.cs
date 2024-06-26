@@ -16,7 +16,7 @@ public class BulletScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(new Vector2(5f * Time.deltaTime, 0));
+        transform.Translate(new Vector2(Constants.BULLET_SPEED * Time.deltaTime, 0));
     }
 
     private void OnTriggerEnter2D(Collider2D col)

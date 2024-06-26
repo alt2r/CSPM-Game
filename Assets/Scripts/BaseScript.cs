@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+
+using TMPro;
 
 public class BaseScript : MonoBehaviour
 {
     // Start is called before the first frame update
-
     void Start()
     {
         BoxCollider2D col = gameObject.AddComponent<BoxCollider2D>();
@@ -21,5 +23,4 @@ public class BaseScript : MonoBehaviour
     {
         
     }
-
 }
