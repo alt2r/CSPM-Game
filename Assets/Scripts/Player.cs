@@ -15,10 +15,9 @@ public class Player
     float fireRate;
 
     Dictionary<Constants.Upgrades, int> upgradeLevels = new Dictionary<Constants.Upgrades, int>(){
-        {Constants.Upgrades.BURST_MODE, 0},
-        {Constants.Upgrades.SHOTGUN, 0},
-        {Constants.Upgrades.FIRE_RATE, 0},
-        {Constants.Upgrades.KNOCKBACK, 0}
+        {Constants.Upgrades.WEAPON, 0},
+        {Constants.Upgrades.BARRIER, 0},
+        {Constants.Upgrades.SCREENWIPE, 0},
     };
     // Start is called before the first frame update
     private float lives = 0;
@@ -70,8 +69,8 @@ public class Player
     // Update is called once per frame
     public void IncrementScores()
     {
-        score++;
-        spendablePoints++;
+        score++; // += 100;
+        spendablePoints++; // += 100;
         UpdatePointsDisplay();
         return;
     }
@@ -83,7 +82,7 @@ public class Player
 
     public void UpdateHealth(float changeInHealth)
     {
-        lives += changeInHealth;
+        lives -= changeInHealth;
         if(lives <= 0)
         {
         LoseGame();
@@ -107,5 +106,16 @@ public class Player
     private void LoseGame()
     {
         SceneManager.LoadSceneAsync("GameOverScene", LoadSceneMode.Single);
+    }
+
+    public int getSpendablePoints()
+    {
+        return spendablePoints;
+    }
+
+    public void spendPoints(int spent)
+    {
+        spendablePoints -= spent;
+        UpdatePointsDisplay();
     }
 }

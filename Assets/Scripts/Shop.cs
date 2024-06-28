@@ -4,69 +4,106 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
+using Unity.Mathematics;
 public class Shop : MonoBehaviour
 {
-    [SerializeField] Button increaseFireRateButton;
-    [SerializeField] Button knockbackButton;
-    [SerializeField] Button shotgunModeButton;
-    [SerializeField] Button burstModeButton;
+    [SerializeField] Button weaponUpgradeButton;
+    [SerializeField] Button barrierUpgradeButton;
+    [SerializeField] Button screenWipeButton;
+    [SerializeField] Button mainMenuButton;
+    [SerializeField] GameObject firewallGO;
+    [SerializeField] GameObject wiperGO;
 
-    TMP_Text increaseFireRateText;
-    TMP_Text knockbackText;
-    TMP_Text shotgunModeText;
-    TMP_Text burstModeText;
+    Player player;
+    Upgrade weapon, barrier, screenwipe;
+    bool wiper = false;
 
-    int increaseFireRateCost = 10;
-    int knockbackCost = 10;
-    int shotgunModeCost = 25;
-    int burstModeCost = 25;
-
-
-    //Player player;
-
-    void Start()
+    void Awake()
     {
-        increaseFireRateButton.onClick.AddListener(IncreaseFireRate);
-        knockbackButton.onClick.AddListener(Knockback);
-        shotgunModeButton.onClick.AddListener(ShotgunMode);
-        burstModeButton.onClick.AddListener(BurstMode);
+        weaponUpgradeButton.onClick.AddListener(WeaponUpgrade);
+        barrierUpgradeButton.onClick.AddListener(BarrierUpgrade);
+        screenWipeButton.onClick.AddListener(ScreenWipe);
 
-        increaseFireRateText = increaseFireRateButton.GetComponentInChildren<TMP_Text>();
-        knockbackText = knockbackButton.GetComponentInChildren<TMP_Text>();
-        shotgunModeText = shotgunModeButton.GetComponentInChildren<TMP_Text>();
-        burstModeText = burstModeButton.GetComponentInChildren<TMP_Text>();
+        mainMenuButton.onClick.AddListener(backToMenu);
 
-        increaseFireRateText.text = "Increase fire rate\nCost: " + increaseFireRateCost;
-        knockbackText.text = "Knock back malware\nCost: " + knockbackCost;
-        shotgunModeText.text = "Shotgun Mode\nCost: " + shotgunModeCost;
-        burstModeText.text = "Burst Mode\nCost: " + burstModeCost;
+        weapon = new Upgrade(weaponUpgradeButton, Constants.WEAPON_UPGRADE_COST, Constants.Upgrades.WEAPON, "planning", "weapon upgrades");
+        barrier = new Upgrade(barrierUpgradeButton, Constants.BARRIER_COST, Constants.Upgrades.BARRIER, "firewall", "slows down enemies");
+        screenwipe = new Upgrade(screenWipeButton, Constants.SCREEN_WIPE_COST, Constants.Upgrades.SCREENWIPE, "system update", "damages all malware on screen");
 
     }
 
-    private void IncreaseFireRate()
+    void OnEnable()
     {
-        Player.GetInstance().SetFireRate(Player.GetInstance().GetFireRate() * 1.5f);
-        increaseFireRateCost *= 2;
-        increaseFireRateText.text = "";
-
-        Player.GetInstance().increaseValueInUpgradesDict(Constants.Upgrades.FIRE_RATE);
+        player = Player.GetInstance();
+        //int points = player.getSpendablePoints();
+        weapon.refreshButton(player);
+        barrier.refreshButton(player);
+        screenwipe.refreshButton(player);
     }
 
-    private void Knockback()
+    private void WeaponUpgrade()
     {
-        Player.GetInstance().increaseValueInUpgradesDict(Constants.Upgrades.KNOCKBACK);
+        weapon.DoUpgrade(player);
+        switch (player.GetUpgradesDict()[Constants.Upgrades.WEAPON])
+        {
+            case 1:
+            player.SetFireRate(player.GetFireRate() * Constants.FIRE_RATE_INCREASE_MODIFIER);
+            break;
+            case 2:
+            player.SetFireRate(player.GetFireRate() * Constants.SHOTGUN_FIRE_RATE_MODIFIER);
+            break;
+            case 3:
+            player.SetFireRate(player.GetFireRate() * Constants.BURST_MODE_FIRE_RATE_MODIFIER);
+            break;
+            default:
+            break;
+        }
+
+
+        OnEnable();
     }
 
-    private void ShotgunMode()
+    private void BarrierUpgrade()
     {
-        Player.GetInstance().increaseValueInUpgradesDict(Constants.Upgrades.SHOTGUN);
+        barrier.DoUpgrade(player);
+        switch (player.GetUpgradesDict()[Constants.Upgrades.BARRIER])
+        {
+            case 1:
+            Instantiate(firewallGO, new Vector2(Constants.FIREWALL_1_POS, 0), new Quaternion(0,0,0,0));
+            break;
+            case 2:
+            Instantiate(firewallGO, new Vector2(Constants.FIREWALL_2_POS, 0), new Quaternion(0,0,0,0));
+            break;
+            case 3:
+            Instantiate(firewallGO, new Vector2(Constants.FIREWALL_3_POS, 0), new Quaternion(0,0,0,0));
+            break;
+            default:
+            break;
+        }
+
+        OnEnable();
     }
 
-    private void BurstMode()
+    private void ScreenWipe()
     {
-        Player player = Player.GetInstance();
-        player.increaseValueInUpgradesDict(Constants.Upgrades.BURST_MODE);
-        player.SetFireRate(player.GetFireRate() * Constants.BURST_MODE_FIRE_RATE_MODIFIER);
+        screenwipe.DoUpgrade(player);
+        wiper = true;
+        OnEnable();
+    }
+
+    void OnDisable()
+    {
+        if(wiper)
+        {
+            wiper = false;
+            Instantiate(wiperGO, new Vector2(-7f, 0), new Quaternion(0, 0, 0, 0));
+        }
+    }
+
+    public void backToMenu()
+    {
+        SceneManager.LoadSceneAsync(Constants.SceneNames.MenuScene.ToString(), LoadSceneMode.Single);
     }
 }
 

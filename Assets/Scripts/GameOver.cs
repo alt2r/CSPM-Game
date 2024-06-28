@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -29,7 +26,7 @@ public class GameOver : MonoBehaviour
         {
             sw.WriteLine(player.GetPlayerName() + "," + player.GetScore());
         }
-        SceneManager.LoadSceneAsync("MenuScene", LoadSceneMode.Single);
+        SceneManager.LoadSceneAsync(Constants.SceneNames.MenuScene.ToString(), LoadSceneMode.Single);
 
     }
 }

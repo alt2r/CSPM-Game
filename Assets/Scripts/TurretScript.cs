@@ -5,19 +5,25 @@ using UnityEngine;
 
 public class TurretScript : MonoBehaviour
 {
-    // Start is called before the first frame update
+    GameObject currentBullet; //declared as global to save the shoot() method from having to allocate memory. shoot() was causing a lot of lag
     float momentum = 0;
     bool paused = false;
     [SerializeField]
     GameObject bulletGO;
 
+    List<GameObject> inactiveBulletList = new List<GameObject>();
+
+    Player player;
+
     float shootCountdown = 0; //counts down to 0
+
+    float burstCooldown = 0;
+    int burstShotsFired;
     void Start()
     {
-        //StartCoroutine(Shoot());
+        player = Player.GetInstance();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(paused)
@@ -26,6 +32,16 @@ public class TurretScript : MonoBehaviour
         }
         if(shootCountdown > 0)   //turret shoot cooldown
         shootCountdown -= Time.deltaTime;
+
+        if(burstCooldown > 0)
+        {
+            burstCooldown -= Time.deltaTime;
+            if(burstCooldown <= 0)
+            {
+                Shoot();
+            }
+        
+        }
 
 
         //movement
@@ -79,7 +95,10 @@ public class TurretScript : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
-            Shoot();
+            if(shootCountdown <= 0)
+            {
+                Shoot();
+            }
         }
 
         return;
@@ -96,41 +115,75 @@ public class TurretScript : MonoBehaviour
         paused = false;
     }
 
-
-    //IEnumerator Shoot()
+    public void addToInactiveBulletList(GameObject b)
+    {
+        inactiveBulletList.Add(b);
+    }
     void Shoot()
     {
-        Player player = Player.GetInstance();
-        
-        if(shootCountdown <= 0)
+        shootCountdown = 1 / player.GetFireRate();
+        if(player.GetUpgradesDict()[Constants.Upgrades.WEAPON] > 1) //shotugn enables at level 2
         {
-            shootCountdown = 1 / player.GetFireRate();
-            GameObject thisBullet = Instantiate(bulletGO);
-            thisBullet.transform.position = transform.position;
-            if(player.GetUpgradesDict()[Constants.Upgrades.BURST_MODE] > 0)
-            {
-                StartCoroutine(BurstMode(player.GetUpgradesDict()[Constants.Upgrades.BURST_MODE]));
-            }
+            shotgunShoot();
+            
         }
+        else
+        {
+            //major optimisation tried to reuse bullets instead of creating new ones
+            if(inactiveBulletList.Count > 0)
+            {
+                currentBullet = inactiveBulletList[0];
+                inactiveBulletList.RemoveAt(0);
+                currentBullet.SetActive(true);
+            }
+            else
+            {
+                currentBullet = Instantiate(bulletGO);
+                currentBullet.GetComponent<BulletScript>().SetReferenceToTurretScript(this);
+            } 
+        }
+
+
+
+        currentBullet.transform.position = transform.position;
+        if(player.GetUpgradesDict()[Constants.Upgrades.WEAPON] == 3 && burstShotsFired < 1)
+        {
+            burstCooldown = Constants.BURST_MODE_TIME_BETWEEN_SHOTS;
+            burstShotsFired++;
+        }
+        else
+        {
+            burstShotsFired = 0;
+        }
+        
         return;
 
     }
 
-    IEnumerator BurstMode(int level)
+    void shotgunShoot()
     {
-        int shot = 0;
-        bool firstRun = true;
-        while(shot < level)
+        List<GameObject> bullets = new List<GameObject>();
+        for (int i = 0; i < 3; i++)
         {
-            if(firstRun)
+            BulletScript thisBulletScript;
+            if(inactiveBulletList.Count > 0)
             {
-                firstRun = false; //so that there arent 2 bullets on top of each other
-                yield return new WaitForSeconds(Constants.BURST_MODE_TIME_BETWEEN_SHOTS);
+                currentBullet = inactiveBulletList[0];
+                inactiveBulletList.RemoveAt(0);
+                currentBullet.SetActive(true);
+
+                thisBulletScript = currentBullet.GetComponent<BulletScript>();
             }
-            shot++;
-            GameObject thisBullet = Instantiate(bulletGO);
-            thisBullet.transform.position = transform.position;
-            yield return new WaitForSeconds(Constants.BURST_MODE_TIME_BETWEEN_SHOTS);
-        }
+            else
+            {
+                currentBullet = Instantiate(bulletGO);
+                thisBulletScript = currentBullet.GetComponent<BulletScript>();
+                thisBulletScript.SetReferenceToTurretScript(this);
+            }
+            currentBullet.transform.position = transform.position;
+            thisBulletScript.setYMovement((i - 1) * Constants.SHOTGUN_SPREAD);
+            bullets.Add(currentBullet);
+            }
     }
+
 }

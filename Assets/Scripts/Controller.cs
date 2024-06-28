@@ -1,12 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Rendering;
 using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Controller : MonoBehaviour
 {
@@ -17,8 +14,11 @@ public class Controller : MonoBehaviour
     [SerializeField]private TMP_Text livesDisplay;
     [SerializeField] private GameObject turretGO;
     [SerializeField] private GameObject shopCanvas;
+    [SerializeField] private Button closeShop;
 
     private System.Random random = new System.Random();
+
+
 
     private float malwareSpeed = 2;
     private float malwareRadius = 0.5f;
@@ -29,6 +29,11 @@ public class Controller : MonoBehaviour
     bool paused = false;
     bool firstLoop;
 
+    private float counter = 0;
+
+    private List<MalwareScript> activeMalware = new List<MalwareScript>();
+    private List<MalwareScript> inactiveMalware = new List<MalwareScript>();
+
     GameObject turret;
 
     System.Random rand = new System.Random();
@@ -38,8 +43,8 @@ public class Controller : MonoBehaviour
         string playerName = Menu.GetPlayerName();
         Player player = new Player(playerName, pointsDisplay, livesDisplay);
         playerNameDisplay.text = playerName;
-        StartCoroutine(SpawnMalware());
-        turret = Instantiate(turretGO, new Vector2(-5.72f, 0), new Quaternion(0, 0, 0, 0));
+        turret = Instantiate(turretGO, new Vector2(Constants.TURRET_SPAWN_POINT, 0), new Quaternion(0, 0, 0, 0));
+        closeShop.onClick.AddListener(Resume);
         return;
      }
 
@@ -57,23 +62,37 @@ public class Controller : MonoBehaviour
             }
         }
 
+
+        //spawn malware
+        if(!paused)
+        {
+            counter -= Time.deltaTime;
+            if(counter <= 0)
+            {
+                SpawnMalware();
+            }
+        }
+
+        //move malware (so that each malware doesnt need an update)
+        if(!paused)
+        {
+            foreach(MalwareScript malware in activeMalware)
+            {
+                malware.Move();
+            }
+        }
     }
+
 
     public void Pause()
     {
         paused = true;
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Malware");
-        GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
-        foreach (GameObject enemy in enemies)
-        {
-            enemy.GetComponent<MalwareScript>().Pause();
-        }
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag(Constants.BULLET_TAG);
         foreach(GameObject bullet in bullets)
         {
             bullet.GetComponent<BulletScript>().Pause();
         }
         turret.GetComponent<TurretScript>().Pause();
-        StopAllCoroutines();
 
         shopCanvas.SetActive(true);
     }
@@ -81,25 +100,26 @@ public class Controller : MonoBehaviour
     public void Resume()
     {
         paused = false;
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Malware");
-        GameObject[] bullets = GameObject.FindGameObjectsWithTag("Bullet");
-        foreach (GameObject enemy in enemies)
-        {
-            enemy.GetComponent<MalwareScript>().Resume();
-        }
+        GameObject[] bullets = GameObject.FindGameObjectsWithTag(Constants.BULLET_TAG);
         foreach(GameObject bullet in bullets)
         {
             bullet.GetComponent<BulletScript>().Resume();
         }
         turret.GetComponent<TurretScript>().Resume();
-        StartCoroutine(SpawnMalware());
         firstLoop = true;
 
         shopCanvas.SetActive(false);
     }
 
-    IEnumerator SpawnMalware()
+    public void setMalwareAsInactive(MalwareScript mws)
     {
+        activeMalware.Remove(mws);
+        inactiveMalware.Add(mws);
+    }
+
+    void SpawnMalware()
+    {
+        MalwareScript malwareScript;
         Constants.SceneNames sceneNameAsEnum;
         Enum.TryParse(SceneManager.GetActiveScene().name, out sceneNameAsEnum);
         //basically this is just a much better way of doing while(scenename = "gamescene")
@@ -107,25 +127,35 @@ public class Controller : MonoBehaviour
         {
             if(firstLoop)
             {
-                Debug.Log("first loop apparently");
-                yield return new WaitForSeconds(timeDelay); //was having some problems with pausing causing oads of enemys to spawn
+                counter = timeDelay;
                 firstLoop = false;
+                return;
             }
 
-            GameObject thisGO = Instantiate(malwareGO, new Vector3(Constants.ENEMY_SPAWN_DISTANCE, random.Next(-40, 40) / 10.0f, 0), new Quaternion(0, 0, 0, 0));
-            MalwareScript malwareScript = thisGO.GetComponent<MalwareScript>();
+            if(inactiveMalware.Count > 0)
+            {
+                malwareScript = inactiveMalware[0];
+                malwareScript.gameObject.transform.position = new Vector3(Constants.ENEMY_SPAWN_DISTANCE, random.Next(-40, 40) / 10.0f, 0);
+                malwareScript.SetActive(true);
+                inactiveMalware.RemoveAt(0);
+            }
+            else
+            {   
+                malwareScript = Instantiate(malwareGO, new Vector3(Constants.ENEMY_SPAWN_DISTANCE, random.Next(-40, 40) / 10.0f, 0), new Quaternion(0, 0, 0, 0)).GetComponent<MalwareScript>();
+            }
+            activeMalware.Add(malwareScript);
 
             int randnum = rand.Next(Constants.CHANCE_OF_BUFFED_ENEMY); //0 - 10
             switch(randnum)
             {
                 case 1:
-                malwareScript.init(malwareSpeed * 2, malwareRadius, malwareHealth / 2); //fast
+                malwareScript.init(malwareSpeed * Constants.FAST_ENEMY_SPEED_MULTIPLIER, malwareRadius, malwareHealth * Constants.FAST_ENEMY_HEALTH_MULTIPLIER, this); //fast
                 break;
                 case 2:
-                malwareScript.init(malwareSpeed / 2f, malwareRadius * 1.5f, malwareHealth * 2);  //high hp
+                malwareScript.init(malwareSpeed * Constants.STRONG_ENEMY_SPEED_MULTIPLIER, malwareRadius * Constants.STRONG_ENEMY_RADIUS_MODIFIER, malwareHealth * Constants.STRONG_ENEMY_HEALTH_MULTIPLIER, this);  //high hp
                 break;
                 default:
-                malwareScript.init(malwareSpeed, malwareRadius, malwareHealth);
+                malwareScript.init(malwareSpeed, malwareRadius, malwareHealth, this);
                 break;
             }
            
@@ -133,7 +163,7 @@ public class Controller : MonoBehaviour
             {
                 enemiesSpawnedSinceLastIncrease = 0;
                 enemyStatIncreaseCount++;
-                malwareSpeed += 0.25f;
+                malwareSpeed += Constants.ENEMY_GRADUAL_SPEED_INCREASE;
 
                 if(enemyStatIncreaseCount % Constants.INCREASE_HEALTH_EVERY_X_SPEED_INCREASES == 0)
                 {
@@ -143,7 +173,8 @@ public class Controller : MonoBehaviour
             }
             enemiesSpawnedSinceLastIncrease++;
             
-            yield return new WaitForSeconds(timeDelay); //run the next iteration of this loop after timedelay seconds
+            counter = timeDelay;
+            return;
         }
 
    

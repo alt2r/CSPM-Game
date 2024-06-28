@@ -14,6 +14,7 @@ public class Menu : MonoBehaviour
     [SerializeField] Button startGame;
     [SerializeField] GameObject enterName;
     [SerializeField] TMP_Text leaderboard;
+    [SerializeField] Button quit;
     static string playerName = "";
 
     public static string GetPlayerName()
@@ -23,6 +24,7 @@ public class Menu : MonoBehaviour
     void Start()
     {
         startGame.onClick.AddListener(StartGame);
+        quit.onClick.AddListener(Quit);
 
         enterName.GetComponent<TMP_InputField>().onValueChanged.AddListener(OnTextChanged);
         PopulateLeaderboard();
@@ -35,6 +37,10 @@ public class Menu : MonoBehaviour
 
 
         return;
+    }
+    void Quit()
+    {
+        Application.Quit();
     }
 
     void Update()
