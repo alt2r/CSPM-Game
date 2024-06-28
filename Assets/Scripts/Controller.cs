@@ -148,10 +148,10 @@ public class Controller : MonoBehaviour
             int randnum = rand.Next(Constants.CHANCE_OF_BUFFED_ENEMY); //0 - 10
             switch(randnum)
             {
-                case 1:
+                case 1: //email
                 malwareScript.init(malwareSpeed * Constants.FAST_ENEMY_SPEED_MULTIPLIER, malwareRadius, malwareHealth * Constants.FAST_ENEMY_HEALTH_MULTIPLIER, this); //fast
                 break;
-                case 2:
+                case 2: //dollar
                 malwareScript.init(malwareSpeed * Constants.STRONG_ENEMY_SPEED_MULTIPLIER, malwareRadius * Constants.STRONG_ENEMY_RADIUS_MODIFIER, malwareHealth * Constants.STRONG_ENEMY_HEALTH_MULTIPLIER, this);  //high hp
                 break;
                 default:

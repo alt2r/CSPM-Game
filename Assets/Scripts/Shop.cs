@@ -27,9 +27,9 @@ public class Shop : MonoBehaviour
 
         mainMenuButton.onClick.AddListener(backToMenu);
 
-        weapon = new Upgrade(weaponUpgradeButton, Constants.WEAPON_UPGRADE_COST, Constants.Upgrades.WEAPON, "planning", "weapon upgrades");
-        barrier = new Upgrade(barrierUpgradeButton, Constants.BARRIER_COST, Constants.Upgrades.BARRIER, "firewall", "slows down enemies");
-        screenwipe = new Upgrade(screenWipeButton, Constants.SCREEN_WIPE_COST, Constants.Upgrades.SCREENWIPE, "system update", "damages all malware on screen");
+        weapon = new Upgrade(weaponUpgradeButton, Constants.WEAPON_UPGRADE_COST, Constants.Upgrades.WEAPON, Constants.WEAPON_UPGRADE_TEXT, Constants.WEAPON_UPGRADE_SMALL_TEXT);
+        barrier = new Upgrade(barrierUpgradeButton, Constants.BARRIER_COST, Constants.Upgrades.BARRIER, Constants.FIREWALL_TEXT, Constants.FIREWALL_SMALL_TEXT);
+        screenwipe = new Upgrade(screenWipeButton, Constants.SCREEN_WIPE_COST, Constants.Upgrades.SCREENWIPE, Constants.SCREEN_WIPE_TEXT, Constants.SCREEN_WIPE_SMALL_TEXT);
 
     }
 
