@@ -30,7 +30,7 @@ public class BulletScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.name != gameObject.name && col.name != "Firewall(Clone)")
+        if(col.name != gameObject.name && col.name != Constants.FIREWALL_G_O_NAME)
         {
             gameObject.SetActive(false);
             turretScript.addToInactiveBulletList(gameObject);

@@ -97,7 +97,7 @@ public class Shop : MonoBehaviour
         if(wiper)
         {
             wiper = false;
-            Instantiate(wiperGO, new Vector2(-7f, 0), new Quaternion(0, 0, 0, 0));
+            Instantiate(wiperGO, new Vector2(Constants.SCREEN_WIPE_SPAWN_POINT, 0), new Quaternion(0, 0, 0, 0));
         }
     }
 

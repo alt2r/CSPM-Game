@@ -137,12 +137,6 @@ public class Controller : MonoBehaviour
         //basically this is just a much better way of doing while(scenename = "gamescene")
         while(sceneNameAsEnum == Constants.SceneNames.GameScene)
         {
-            if(firstLoop)
-            {
-                counter = timeDelay;
-                firstLoop = false;
-                return;
-            }
             int randnum;
             if(!spawnedByHacker)
             {
@@ -166,7 +160,6 @@ public class Controller : MonoBehaviour
                 malwareScript = Instantiate(malwareGO, spawnPos, new Quaternion(0, 0, 0, 0)).GetComponent<MalwareScript>();
                 activeMalware.Add(malwareScript);
             }
-
 
             switch(randnum)
             {

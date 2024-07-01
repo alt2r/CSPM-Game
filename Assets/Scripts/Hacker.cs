@@ -48,23 +48,19 @@ public class Hacker : MalwareScript
 
     protected void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.gameObject.name == "leftWall")
-        ReachedBase();
 
-        if(col.gameObject.name == "Bullet(Clone)") //i dont think this is good practice, TODO research a better way
+        if(col.gameObject.name == Constants.BULLET_G_O_NAME) 
         {
             TakeDamage();
-            Debug.Log(gameObject.name + "hit with bullet");
         }
 
-        if(col.gameObject.name == "Firewall(Clone)")
+        if(col.gameObject.name == Constants.FIREWALL_G_O_NAME)
         {
-            speed = 0.3f;
+            speed = Constants.ENEMY_SPEED_REGAIN_RATE;
         }
 
-        if(col.gameObject.name == "Wiper(Clone)")
+        if(col.gameObject.name == Constants.WIPER_G_O_NAME)
         {
-            Debug.Log(gameObject.name + "hit with wall");
             health = 1;
             TakeDamage();
         }

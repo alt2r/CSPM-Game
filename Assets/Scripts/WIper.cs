@@ -22,7 +22,7 @@ public class Wiper : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if(col.name == "rightWall")
+        if(col.name == Constants.RIGHT_WALL_NAME)
         {
             Destroy(gameObject);
         }

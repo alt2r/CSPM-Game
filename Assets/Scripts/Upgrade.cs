@@ -21,13 +21,13 @@ public class Upgrade
         {
             switch(text.name)
             {
-                case "Small":
+                case Constants.SMALL_TEXT_NAME:
                 smallText = text;
                 break;
-                case "Big":
+                case Constants.BIG_TEXT_NAME:
                 bigText = text;
                 break;
-                case "Cost":
+                case Constants.COST_TEXT_NAME:
                 costText = text;
                 break;
                 default:

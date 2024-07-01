@@ -286,6 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   malwareGO: {fileID: 5333716322620764071, guid: 0c0797063fc02ba4fa97936fc7739641, type: 3}
+  hackerGO: {fileID: 7210601112675852386, guid: b62ecc9782e3cc4409f62222860fe3a7, type: 3}
   pointsDisplay: {fileID: 215128072}
   playerNameDisplay: {fileID: 270563153}
   livesDisplay: {fileID: 202199695}

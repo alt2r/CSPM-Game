@@ -70,7 +70,7 @@ public class Player
     public void IncrementScores()
     {
         score++; // += 100;
-        spendablePoints += 1;
+        spendablePoints++;
         UpdatePointsDisplay();
         return;
     }
@@ -105,7 +105,7 @@ public class Player
 
     private void LoseGame()
     {
-        SceneManager.LoadSceneAsync("GameOverScene", LoadSceneMode.Single);
+        SceneManager.LoadSceneAsync(Constants.SceneNames.GameOverScene.ToString(), LoadSceneMode.Single);
     }
 
     public int getSpendablePoints()

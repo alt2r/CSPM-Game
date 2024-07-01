@@ -1,5 +1,3 @@
-
-
 public class Constants
 {
     public const float MINIMUM_RELATIVE_MALWARE_SIZE = 0.7f;
@@ -59,6 +57,29 @@ public class Constants
     public const float HACKER_STOP_POINT = 7.5f;
     public const float HACKER_SPAWN_RATE = 3f;
     public const float HACKER_HEALTH = 1;
+
+public const string YOU_DIED_TEXT = "You Died! \n Name: ";
+public const string SCORE_TEXT = "\nScore: ";
+public const string SCORES_FILE_PATH = "players.txt";
+public const string FIREWALL_G_O_NAME = "Firewall(Clone)";
+public const string WIPER_G_O_NAME = "Wiper(Clone)";
+public const string BULLET_G_O_NAME = "Bullet(Clone)";
+public const string LEFT_WALL_NAME = "leftWall";
+public const float FIREWALL_SPEED_MODIFIER = 0.3f;
+public const float ENEMY_SPEED_REGAIN_RATE = 2;
+public const float SCREEN_WIPE_SPAWN_POINT = -6.6f;
+public const float PLAYER_MOVEMENT_BOUNDRIES = 4.5f;
+
+public const float PLAYER_MOVEMENT_TOP_SPEED = 15;
+public const float PLAYER_MOVEMENT_INITIAL_SPEED = 10;
+public const float PLAYER_MOVEMENT_ACCELERATION = 5;
+public const float PLAYER_MOVEMENT_FRICTION = 3.5f;
+public const int SHOTGUN_BULLETS_FIRED = 3; 
+
+public const string SMALL_TEXT_NAME = "Small";
+public const string BIG_TEXT_NAME = "Big";
+public const string COST_TEXT_NAME = "Cost";
+public const string RIGHT_WALL_NAME = "rightWall";
 
 
 

@@ -17,12 +17,12 @@ public class GameOver : MonoBehaviour
         Button btn = backToMenu.GetComponent<Button>();  //the button component that is attached to the button object
         btn.onClick.AddListener(BackToMenu);
 
-        statsDisplay.text = "You Died! \n Name: " + player.GetPlayerName() + "\n Score: " + player.GetScore();
+        statsDisplay.text = Constants.YOU_DIED_TEXT + player.GetPlayerName() + Constants.SCORE_TEXT + player.GetScore();
     }
 
     void BackToMenu()
     {
-        using(StreamWriter sw = new StreamWriter("players.txt", true))
+        using(StreamWriter sw = new StreamWriter(Constants.SCORES_FILE_PATH, true))
         {
             sw.WriteLine(player.GetPlayerName() + "," + player.GetScore());
         }

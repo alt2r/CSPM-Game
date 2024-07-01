@@ -33,7 +33,7 @@ public class Menu : MonoBehaviour
     void StartGame()
     {
         playerName = enterName.GetComponent<TMP_InputField>().text;
-        SceneManager.LoadSceneAsync("GameScene", LoadSceneMode.Single);
+        SceneManager.LoadSceneAsync(Constants.SceneNames.GameScene.ToString(), LoadSceneMode.Single);
 
 
         return;

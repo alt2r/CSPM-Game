@@ -47,46 +47,46 @@ public class TurretScript : MonoBehaviour
         //movement
         if(Input.GetKey(KeyCode.DownArrow))
         {
-            if(momentum > -15)
-            momentum -= 5f * Time.deltaTime;
+            if(momentum > -Constants.PLAYER_MOVEMENT_TOP_SPEED)
+            momentum -= Constants.PLAYER_MOVEMENT_ACCELERATION * Time.deltaTime;
             else
-            momentum = -10;
-            if(momentum > 3.5f * Time.deltaTime)
-            momentum -= 3.5f * Time.deltaTime;
+            momentum = -Constants.PLAYER_MOVEMENT_INITIAL_SPEED;
+            if(momentum > Constants.PLAYER_MOVEMENT_FRICTION * Time.deltaTime)
+            momentum -= Constants.PLAYER_MOVEMENT_FRICTION * Time.deltaTime;
         }
         else if(Input.GetKey(KeyCode.UpArrow))
         {
-            if(momentum < 15)
-            momentum += 5f * Time.deltaTime;
+            if(momentum < Constants.PLAYER_MOVEMENT_TOP_SPEED)
+            momentum += Constants.PLAYER_MOVEMENT_ACCELERATION * Time.deltaTime;
             else
-            momentum = 10;
-            if(momentum < -3.5f * Time.deltaTime) //friction + movement
-            momentum += 3.5f * Time.deltaTime;
+            momentum = Constants.PLAYER_MOVEMENT_INITIAL_SPEED;
+            if(momentum < -Constants.PLAYER_MOVEMENT_FRICTION * Time.deltaTime) //friction + movement
+            momentum += Constants.PLAYER_MOVEMENT_FRICTION * Time.deltaTime;
             
         }
         else
         {
-            if(momentum > 3.5f * Time.deltaTime)
-            momentum -= 3.5f * Time.deltaTime; //friciton
-            else if(momentum < -3.5f * Time.deltaTime)
-            momentum += 3.5f * Time.deltaTime;
+            if(momentum > Constants.PLAYER_MOVEMENT_FRICTION * Time.deltaTime)
+            momentum -= Constants.PLAYER_MOVEMENT_FRICTION * Time.deltaTime; //friciton
+            else if(momentum < -Constants.PLAYER_MOVEMENT_FRICTION * Time.deltaTime)
+            momentum += Constants.PLAYER_MOVEMENT_FRICTION * Time.deltaTime;
             else
             momentum = 0;
         }
 
-        if(!(momentum > 0 && transform.position.y > 4.5f) && !(momentum < 0 && transform.position.y < -4.5f))
+        if(!(momentum > 0 && transform.position.y > Constants.PLAYER_MOVEMENT_BOUNDRIES) && !(momentum < 0 && transform.position.y < -Constants.PLAYER_MOVEMENT_BOUNDRIES))
         {
             transform.Translate(new Vector2(0, momentum * Time.deltaTime));
         }
         else
         {
-            if(transform.position.y > 4.5f)
+            if(transform.position.y > Constants.PLAYER_MOVEMENT_BOUNDRIES)
             {
-                transform.position = new Vector2(transform.position.x, 4.5f);
+                transform.position = new Vector2(transform.position.x, Constants.PLAYER_MOVEMENT_BOUNDRIES);
             }
-            else if(transform.position.y < -4.5f)
+            else if(transform.position.y < -Constants.PLAYER_MOVEMENT_BOUNDRIES)
             {
-                transform.position = new Vector2(transform.position.x, -4.5f);
+                transform.position = new Vector2(transform.position.x, -Constants.PLAYER_MOVEMENT_BOUNDRIES);
             }
             
             momentum = 0;
@@ -163,7 +163,7 @@ public class TurretScript : MonoBehaviour
     void shotgunShoot()
     {
         List<GameObject> bullets = new List<GameObject>();
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < Constants.SHOTGUN_BULLETS_FIRED; i++)
         {
             BulletScript thisBulletScript;
             if(inactiveBulletList.Count > 0)
