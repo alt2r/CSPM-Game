@@ -70,7 +70,7 @@ public class Player
     public void IncrementScores()
     {
         score++; // += 100;
-        spendablePoints++; // += 100;
+        spendablePoints += 1;
         UpdatePointsDisplay();
         return;
     }

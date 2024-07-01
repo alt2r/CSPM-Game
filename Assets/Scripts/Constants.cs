@@ -1,4 +1,4 @@
-using UnityEditor.ShaderGraph.Internal;
+
 
 public class Constants
 {
@@ -10,9 +10,9 @@ public class Constants
     public const string LIVES_DISPLAY_TEXT = "lives: ";
     public const string PLAYERS_FILE_NAME = "players.txt";
     public const float BULLET_SPEED = 10;
-    public const int NUMBER_OF_LEADERBOARD_ENTRIES = 10;
+    public const int NUMBER_OF_LEADERBOARD_ENTRIES = 20;
     public const int NUM_OF_ENEMIES_TO_INCREASE_DIFFICULTY = 5;
-    public const int CHANCE_OF_BUFFED_ENEMY = 10; // do 1/value you want so 0.1 = 10
+    public const int CHANCE_OF_BUFFED_ENEMY = 10; // do (1/value you want) + 1 so 0.1 = 11
     public const int INCREASE_HEALTH_EVERY_X_SPEED_INCREASES = 6;
     public enum SceneNames{GameScene, MenuScene, GameOverScene}
     public enum Upgrades{WEAPON, BARRIER, SCREENWIPE}
@@ -53,5 +53,13 @@ public class Constants
 
     public const float WIPER_MOVE_SPEED = 8;
     public const string SOLD_OUT_TEXT = "Sold out!";
+
+    public const float HACKER_SPEED = 1;
+    public const float HACKER_RADIUS = 0.875f;
+    public const float HACKER_STOP_POINT = 7.5f;
+    public const float HACKER_SPAWN_RATE = 3f;
+    public const float HACKER_HEALTH = 1;
+
+
 
 }
