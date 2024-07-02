@@ -29,9 +29,8 @@ public class Controller : MonoBehaviour
     private int enemiesSpawnedSinceLastIncrease = 0;
     private int enemyStatIncreaseCount = 0;
     bool paused = false;
-    bool firstLoop;
-
     Hacker hacker;
+    bool hackerEnabled = false;
 
     private float counter = 0;
 
@@ -91,6 +90,11 @@ public class Controller : MonoBehaviour
         }
     }
 
+    public void setHackerEnabled(bool x)
+    {
+        hackerEnabled = x;
+    }
+
     public bool getPaused()
     {
         return paused;
@@ -107,6 +111,7 @@ public class Controller : MonoBehaviour
         turret.GetComponent<TurretScript>().Pause();
 
         shopCanvas.SetActive(true);
+        hacker.setPaused(true);
     }
 
     public void Resume()
@@ -118,9 +123,9 @@ public class Controller : MonoBehaviour
             bullet.GetComponent<BulletScript>().Resume();
         }
         turret.GetComponent<TurretScript>().Resume();
-        firstLoop = true;
 
         shopCanvas.SetActive(false);
+        hacker.setPaused(false);
     }
 
     public void setMalwareAsInactive(MalwareScript mws)
@@ -147,18 +152,20 @@ public class Controller : MonoBehaviour
                 randnum = 50; //number with no power ups
             }
 
-            if(inactiveMalware.Count > 0 && randnum != 5) //5 is the number for a hacker
-            {
+            if(inactiveMalware.Count > 1 && (randnum != 5 || hackerEnabled))  //5 is the number for a hacker
+            { // > 1 in case this script runs twice in one frame which causes the enemies vanish inexplicably
+            //a hacker could spawn an enemy on the same frame as a regular enemy spawns
                 malwareScript = inactiveMalware[0];
                 malwareScript.gameObject.transform.position = spawnPos;
                 malwareScript.SetActive(true);
                 inactiveMalware.RemoveAt(0);
                 activeMalware.Add(malwareScript);
             }
-            else if (randnum != 5)
+            else if (randnum != 5 || hackerEnabled)
             {
                 malwareScript = Instantiate(malwareGO, spawnPos, new Quaternion(0, 0, 0, 0)).GetComponent<MalwareScript>();
                 activeMalware.Add(malwareScript);
+                
             }
 
             switch(randnum)
@@ -174,11 +181,14 @@ public class Controller : MonoBehaviour
                 malwareScript.EnableDollar();
                 break;
                 case 5: 
-                if(!hacker.isActiveAndEnabled)
+                if(!hackerEnabled) 
                 {
                     hacker.SetActive(true);
+                    hackerEnabled = true;
                     hacker.HackerInit(Constants.HACKER_SPEED, Constants.HACKER_HEALTH, this, color, spawnPos);
                 }
+                else
+                malwareScript.init(malwareSpeed, malwareRadius, malwareHealth, this, color);
                 break;
                 case 50: //enemies spawned by hacker have this number set to 50
                 malwareScript.init(malwareSpeed, malwareRadius, malwareHealth/2, this, color); //reduce the hp of enemies spawned by hackers

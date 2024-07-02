@@ -9,14 +9,14 @@ public class Constants
     public const string PLAYERS_FILE_NAME = "players.txt";
     public const float BULLET_SPEED = 10;
     public const int NUMBER_OF_LEADERBOARD_ENTRIES = 20;
-    public const int NUM_OF_ENEMIES_TO_INCREASE_DIFFICULTY = 5;
+    public const int NUM_OF_ENEMIES_TO_INCREASE_DIFFICULTY = 4;
     public const int CHANCE_OF_BUFFED_ENEMY = 10; // do (1/value you want) + 1 so 0.1 = 11
     public const int INCREASE_HEALTH_EVERY_X_SPEED_INCREASES = 6;
     public enum SceneNames{GameScene, MenuScene, GameOverScene}
     public enum Upgrades{WEAPON, BARRIER, SCREENWIPE}
     public const float BURST_MODE_TIME_BETWEEN_SHOTS = 0.1f;
     public const float BURST_MODE_FIRE_RATE_MODIFIER = 0.8f;
-    public const float SHOTGUN_FIRE_RATE_MODIFIER = 0.5f;
+    public const float SHOTGUN_FIRE_RATE_MODIFIER = 0.65f;
     public const float SHOTGUN_SPREAD = 4f; 
 
     public const string WEAPON_UPGRADE_TEXT = "Contingency planning";
@@ -33,14 +33,14 @@ public class Constants
     public const int WEAPON_UPGRADE_COST = 15;
     public const int SCREEN_WIPE_COST = 10;
     public const int UPGRADE_COST_INCREASE_MULTIPLIER = 2;
-    public const float TURRET_SPAWN_POINT = -5.12f;
+    public const float TURRET_SPAWN_POINT = -4.86f;
     public const float FIRE_RATE_INCREASE_MODIFIER = 1.33f;
     public const float FAST_ENEMY_SPEED_MULTIPLIER = 1.33f;
     public const float FAST_ENEMY_HEALTH_MULTIPLIER = 0.5f;
     public const float STRONG_ENEMY_HEALTH_MULTIPLIER = 2f;
     public const float STRONG_ENEMY_SPEED_MULTIPLIER = 0.5f;
     public const float STRONG_ENEMY_RADIUS_MODIFIER = 1.5f;
-    public const float ENEMY_GRADUAL_SPEED_INCREASE = 0.25f;
+    public const float ENEMY_GRADUAL_SPEED_INCREASE = 0.35f;
     public const float ENEMY_DAMAGE = 1;
     public const float BULLET_DAMAGE = 1;
     public const string BULLET_TAG = "Bullet";
@@ -56,7 +56,7 @@ public class Constants
     public const float HACKER_RADIUS = 0.875f;
     public const float HACKER_STOP_POINT = 7.5f;
     public const float HACKER_SPAWN_RATE = 3f;
-    public const float HACKER_HEALTH = 1;
+    public const float HACKER_HEALTH = 3;
 
 public const string YOU_DIED_TEXT = "You Died! \n Name: ";
 public const string SCORE_TEXT = "\nScore: ";
@@ -67,7 +67,7 @@ public const string BULLET_G_O_NAME = "Bullet(Clone)";
 public const string LEFT_WALL_NAME = "leftWall";
 public const float FIREWALL_SPEED_MODIFIER = 0.3f;
 public const float ENEMY_SPEED_REGAIN_RATE = 2;
-public const float SCREEN_WIPE_SPAWN_POINT = -6.6f;
+public const float SCREEN_WIPE_SPAWN_POINT = -6.1f;
 public const float PLAYER_MOVEMENT_BOUNDRIES = 4.5f;
 
 public const float PLAYER_MOVEMENT_TOP_SPEED = 15;
@@ -80,6 +80,7 @@ public const string SMALL_TEXT_NAME = "Small";
 public const string BIG_TEXT_NAME = "Big";
 public const string COST_TEXT_NAME = "Cost";
 public const string RIGHT_WALL_NAME = "rightWall";
+public const float BULLET_SPAWN_OFFSET = 0.35f;
 
 
 

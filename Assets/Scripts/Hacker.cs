@@ -7,37 +7,34 @@ public class Hacker : MalwareScript
 {
     // Start is called before the first frame update
     float counter = 0;
+    bool paused;
     
     public void HackerInit(float speed, float health, Controller controller, Color color, Vector2 position)
     {
         base.init(speed, Constants.HACKER_RADIUS, health, controller, color);
         transform.position = position;
+        paused = false;
     }
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
+        if(paused)
+            return;
+
         if(counter <= 0)
             SpawnMalware();
         if(!controller.getPaused())
             counter -= Time.deltaTime;
-    }
 
-    public override void Move()
-    {
         if(transform.position.x > Constants.HACKER_STOP_POINT) //move to the stopping point
         {
-            base.Move();
+            transform.Translate(-speed * Time.deltaTime, 0, 0);
         }
         else if(transform.position.x != Constants.HACKER_STOP_POINT)
         {
-            transform.position = new UnityEngine.Vector2(Constants.HACKER_STOP_POINT, transform.position.y);
+            transform.position = new Vector2(Constants.HACKER_STOP_POINT, transform.position.y);
         }
     }
+
 
     void SpawnMalware()
     {
@@ -66,5 +63,16 @@ public class Hacker : MalwareScript
         }
 
         return;
+    }
+
+    protected override void Disappear()
+    {
+        gameObject.SetActive(false);
+        controller.setHackerEnabled(false);
+    }
+
+    public void setPaused(bool x)
+    {
+        paused = x;
     }
 }

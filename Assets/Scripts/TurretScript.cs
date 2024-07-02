@@ -130,7 +130,7 @@ public class TurretScript : MonoBehaviour
         else
         {
             //major optimisation tried to reuse bullets instead of creating new ones
-            if(inactiveBulletList.Count > 0)
+            if(inactiveBulletList.Count > 1) //buffer to make sure it doesnt take already active bullets
             {
                 currentBullet = inactiveBulletList[0];
                 inactiveBulletList.RemoveAt(0);
@@ -145,7 +145,7 @@ public class TurretScript : MonoBehaviour
 
 
 
-        currentBullet.transform.position = transform.position;
+        currentBullet.transform.position = new Vector2(transform.position.x + Constants.BULLET_SPAWN_OFFSET, transform.position.y);
         if(player.GetUpgradesDict()[Constants.Upgrades.WEAPON] == 3 && burstShotsFired < 1)
         {
             burstCooldown = Constants.BURST_MODE_TIME_BETWEEN_SHOTS;
