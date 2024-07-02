@@ -785,8 +785,8 @@ MonoBehaviour:
 
     Down arrow: move down
 
-    space:
-    shoot
+    space/left
+    click: shoot
 
     S: open/close shop'
   m_isRightToLeft: 0

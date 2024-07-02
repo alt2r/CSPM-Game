@@ -33,7 +33,7 @@ public class Constants
     public const int WEAPON_UPGRADE_COST = 15;
     public const int SCREEN_WIPE_COST = 10;
     public const int UPGRADE_COST_INCREASE_MULTIPLIER = 2;
-    public const float TURRET_SPAWN_POINT = -4.86f;
+    public const float TURRET_SPAWN_POINT = -5.09f;
     public const float FIRE_RATE_INCREASE_MODIFIER = 1.33f;
     public const float FAST_ENEMY_SPEED_MULTIPLIER = 1.33f;
     public const float FAST_ENEMY_HEALTH_MULTIPLIER = 0.5f;

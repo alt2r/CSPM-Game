@@ -5,6 +5,8 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Security.Cryptography;
+using System.Linq;
+using System.Collections;
 
 public class Controller : MonoBehaviour
 {
@@ -17,8 +19,12 @@ public class Controller : MonoBehaviour
     [SerializeField] private GameObject turretGO;
     [SerializeField] private GameObject shopCanvas;
     [SerializeField] private Button closeShop;
+    [SerializeField] private Button openShop;
+    [SerializeField] private GameObject tutorialCanvas;
+    [SerializeField] private Button closeTutorialButton;
+    [SerializeField] private GameObject tutorialImage;
+    [SerializeField] private GameObject destroyAllIncomingMalware;
 
-    private System.Random random = new System.Random();
 
 
 
@@ -28,7 +34,7 @@ public class Controller : MonoBehaviour
     private float malwareHealth = 2;
     private int enemiesSpawnedSinceLastIncrease = 0;
     private int enemyStatIncreaseCount = 0;
-    bool paused = false;
+    bool paused = true;
     Hacker hacker;
     bool hackerEnabled = false;
 
@@ -48,16 +54,16 @@ public class Controller : MonoBehaviour
         playerNameDisplay.text = playerName;
         turret = Instantiate(turretGO, new Vector2(Constants.TURRET_SPAWN_POINT, 0), new Quaternion(0, 0, 0, 0));
         closeShop.onClick.AddListener(Resume);
+        openShop.onClick.AddListener(Pause);
+        closeTutorialButton.onClick.AddListener(CloseTutorial);
         hacker = Instantiate(hackerGO).GetComponent<Hacker>();
         hacker.SetActive(false);
-
-        
         return;
      }
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.S))
+        if(Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.Escape))
         {
             if(paused)
             {
@@ -88,6 +94,24 @@ public class Controller : MonoBehaviour
                 malware.Move();
             }
         }
+    }
+
+    IEnumerator FlashTextOnScreen()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            destroyAllIncomingMalware.SetActive(!destroyAllIncomingMalware.activeSelf);
+            yield return new WaitForSeconds(1.5f);
+        }
+        StopAllCoroutines(); //coroutines are not very efficient so want to make sure this one stops
+    }
+
+    private void CloseTutorial()
+    {
+        tutorialCanvas.SetActive(false);
+        tutorialImage.SetActive(false);
+        StartCoroutine(FlashTextOnScreen());
+        Resume();
     }
 
     public void setHackerEnabled(bool x)
