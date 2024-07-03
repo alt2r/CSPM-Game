@@ -18,17 +18,13 @@ public class Constants
     public const float BURST_MODE_FIRE_RATE_MODIFIER = 0.8f;
     public const float SHOTGUN_FIRE_RATE_MODIFIER = 0.65f;
     public const float SHOTGUN_SPREAD = 4f; 
-
     public const string WEAPON_UPGRADE_TEXT = "Contingency planning";
     public const string WEAPON_UPGRADE_SMALL_TEXT = "Upgrades your weapon";
-
     public const string FIREWALL_TEXT = "Firewall";
     public const string FIREWALL_SMALL_TEXT = "A wall to block malware";
     public const string SCREEN_WIPE_TEXT = "Patch management";
     public const string SCREEN_WIPE_SMALL_TEXT = "Destroys all currently active malware";
-
     public const string COST_STRING = "Cost: ";
-
     public const int BARRIER_COST = 10;
     public const int WEAPON_UPGRADE_COST = 15;
     public const int SCREEN_WIPE_COST = 10;
@@ -44,46 +40,43 @@ public class Constants
     public const float ENEMY_DAMAGE = 1;
     public const float BULLET_DAMAGE = 1;
     public const string BULLET_TAG = "Bullet";
-
     public const float FIREWALL_1_POS = 5;
     public const float FIREWALL_2_POS = 5.75f;
     public const float FIREWALL_3_POS = 6.5f;
-
     public const float WIPER_MOVE_SPEED = 8;
     public const string SOLD_OUT_TEXT = "Sold out!";
-
     public const float HACKER_SPEED = 1;
     public const float HACKER_RADIUS = 0.875f;
     public const float HACKER_STOP_POINT = 7.5f;
     public const float HACKER_SPAWN_RATE = 3f;
     public const float HACKER_HEALTH = 3;
-
-public const string YOU_DIED_TEXT = "You Died!\nName: ";
-public const string SCORE_TEXT = "\nScore: ";
-public const string SCORES_FILE_PATH = "players.txt";
-public const string FIREWALL_G_O_NAME = "Firewall(Clone)";
-public const string WIPER_G_O_NAME = "Wiper(Clone)";
-public const string BULLET_G_O_NAME = "Bullet(Clone)";
-public const string LEFT_WALL_NAME = "leftWall";
-public const float FIREWALL_SPEED_MODIFIER = 0.3f;
-public const float ENEMY_SPEED_REGAIN_RATE = 2;
-public const float SCREEN_WIPE_SPAWN_POINT = -6.1f;
-public const float PLAYER_MOVEMENT_BOUNDRIES = 4.5f;
-
-public const float PLAYER_MOVEMENT_TOP_SPEED = 15;
-public const float PLAYER_MOVEMENT_INITIAL_SPEED = 10;
-public const float PLAYER_MOVEMENT_ACCELERATION = 5;
-public const float PLAYER_MOVEMENT_FRICTION = 3.5f;
-public const int SHOTGUN_BULLETS_FIRED = 3; 
-
-public const string SMALL_TEXT_NAME = "Small";
-public const string BIG_TEXT_NAME = "Big";
-public const string COST_TEXT_NAME = "Cost";
-public const string RIGHT_WALL_NAME = "rightWall";
-public const float BULLET_SPAWN_OFFSET = 0.35f;
-public const float INITIAL_EASY_MODE_SPAWN_RATE_MODIFIER = 0.4f;
-public const float EASY_MODE_DIFFICULTY_INCREASE_PER_ENEMY = 0.08f; 
-
-
-
+    public const string YOU_DIED_TEXT = "You Died!\nName: ";
+    public const string SCORE_TEXT = "\nScore: ";
+    public const string SCORES_FILE_PATH = "players.txt";
+    public const string FIREWALL_G_O_NAME = "Firewall(Clone)";
+    public const string WIPER_G_O_NAME = "Wiper(Clone)";
+    public const string BULLET_G_O_NAME = "Bullet(Clone)";
+    public const string LEFT_WALL_NAME = "leftWall";
+    public const float FIREWALL_SPEED_MODIFIER = 0.3f;
+    public const float ENEMY_SPEED_REGAIN_RATE = 2;
+    public const float SCREEN_WIPE_SPAWN_POINT = -6.1f;
+    public const float PLAYER_MOVEMENT_BOUNDRIES = 4.5f;
+    public const float PLAYER_MOVEMENT_TOP_SPEED = 15;
+    public const float PLAYER_MOVEMENT_INITIAL_SPEED = 10;
+    public const float PLAYER_MOVEMENT_ACCELERATION = 5;
+    public const float PLAYER_MOVEMENT_FRICTION = 3.5f;
+    public const int SHOTGUN_BULLETS_FIRED = 3; 
+    public const string SMALL_TEXT_NAME = "Small";
+    public const string BIG_TEXT_NAME = "Big";
+    public const string COST_TEXT_NAME = "Cost";
+    public const string RIGHT_WALL_NAME = "rightWall";
+    public const float BULLET_SPAWN_OFFSET = 0.35f;
+    public const float INITIAL_EASY_MODE_SPAWN_RATE_MODIFIER = 0.4f;
+    public const float EASY_MODE_DIFFICULTY_INCREASE_PER_ENEMY = 0.08f; 
+    public const float INITIAL_MALWARE_SPEED = 2;
+    public const float BASE_MALWARE_RADIUS = 0.5f;
+    public const float TIME_BETWEEN_ENEMIES = 1.5f;
+    public const float INITIAL_MALWARE_HEALTH = 2f;
+    public const float POINT_AT_WHICH_MALWARE_HAS_REACHED_BASE = 0.8f; //as a fraction of the base's width so 1 = as soon as it touches
+    public const float PLAYER_BASE_FIRE_RATE = 4;
 }

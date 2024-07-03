@@ -7,11 +7,9 @@ using UnityEngine.UI;
 public class GameOver : MonoBehaviour
 {
     [SerializeField]Button backToMenu;
-
     [SerializeField]TMP_Text statsDisplay;
-
-
     Player player;
+
     void Start()
     {
         player = Player.GetInstance();
@@ -25,6 +23,7 @@ public class GameOver : MonoBehaviour
         {
             statsDisplay.text = Constants.YOU_DIED_TEXT + player.GetPlayerName() + Constants.SCORE_TEXT + (player.GetScore() * 2);
         }
+        return;
     }
 
     void BackToMenu()
@@ -37,6 +36,6 @@ public class GameOver : MonoBehaviour
             sw.WriteLine(player.GetPlayerName() + "," + (player.GetScore() * 2));
         }
         SceneManager.LoadSceneAsync(Constants.SceneNames.MenuScene.ToString(), LoadSceneMode.Single);
-
+        return;
     }
 }

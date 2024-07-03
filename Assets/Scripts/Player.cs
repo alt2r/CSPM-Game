@@ -1,43 +1,34 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-
 using TMPro;
-using Unity.VisualScripting;
+
 public class Player
 {
     int score;
     int spendablePoints;
     float fireRate;
-
     Dictionary<Constants.Upgrades, int> upgradeLevels = new Dictionary<Constants.Upgrades, int>(){
         {Constants.Upgrades.WEAPON, 0},
         {Constants.Upgrades.BARRIER, 0},
         {Constants.Upgrades.SCREENWIPE, 0},
     };
-    // Start is called before the first frame update
-    private float lives = 0;
+    private float lives;
     private static Player instance;
     private TMP_Text pointsDisplay;
     private TMP_Text livesDisplay;
-
     private string playerName;
-
     private bool easyMode;
     public Player(string playerName, TMP_Text pointsDisplay, TMP_Text livesDisplay)
     {
-        lives = 5;
-        fireRate = 4;
+        lives = Constants.PLAYER_LIVES;
+        fireRate = Constants.PLAYER_BASE_FIRE_RATE;
         instance = this;
         this.pointsDisplay = pointsDisplay;
         this.livesDisplay = livesDisplay;
         this.playerName = playerName;
         UpdatePointsDisplay();
         UpdateLivesDisplay();
+        return;
     }
 
     public static Player GetInstance()
@@ -49,29 +40,33 @@ public class Player
     {
         return playerName;
     }
+
     public float GetFireRate()
     {
         return fireRate;
     }
+
     public void SetFireRate(float fr)
     {
         fireRate = fr;
+        return;
     }
 
     public void UpdatePointsDisplay()
     {
         pointsDisplay.text = Constants.POINTS_DISPLAY_TEXT + spendablePoints;
+        return;
     }
 
     public void UpdateLivesDisplay()
     {
         livesDisplay.text = Constants.LIVES_DISPLAY_TEXT + lives;
+        return;
     }
 
-    // Update is called once per frame
     public void IncrementScores()
     {
-        score++; // += 100;
+        score++;
         spendablePoints++;
         UpdatePointsDisplay();
         return;
@@ -87,12 +82,11 @@ public class Player
         lives -= changeInHealth;
         if(lives <= 0)
         {
-        LoseGame();
-        return;
+            LoseGame();
+            return;
         }
         UpdateLivesDisplay();
-        return;
-        
+        return;  
     }
 
     public Dictionary<Constants.Upgrades, int> GetUpgradesDict()
@@ -103,11 +97,13 @@ public class Player
     public void increaseValueInUpgradesDict(Constants.Upgrades upgradeToLevelUp)
     {
         upgradeLevels[upgradeToLevelUp]++;
+        return;
     }
 
     private void LoseGame()
     {
         SceneManager.LoadSceneAsync(Constants.SceneNames.GameOverScene.ToString(), LoadSceneMode.Single);
+        return;
     }
 
     public int getSpendablePoints()
@@ -119,11 +115,13 @@ public class Player
     {
         spendablePoints -= spent;
         UpdatePointsDisplay();
+        return;
     }
 
-    public void setEasyMode(bool easyMode_)
+    public void setEasyMode(bool easymode)
     {
-        easyMode = easyMode_;
+        easyMode = easymode;
+        return;
     }
 
     public bool getEasyMode()

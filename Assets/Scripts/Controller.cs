@@ -4,13 +4,10 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System.Security.Cryptography;
-using System.Linq;
 using System.Collections;
 
 public class Controller : MonoBehaviour
 {
-    // Start is called before the first frame update
     [SerializeField]private GameObject malwareGO;
     [SerializeField] private GameObject hackerGO;
     [SerializeField]private TMP_Text pointsDisplay;
@@ -36,38 +33,28 @@ public class Controller : MonoBehaviour
     [SerializeField] private GameObject tutorialImagePg2;
     [SerializeField] private GameObject tutorialCanvasPg3;
     [SerializeField] private GameObject tutorialImagePg3;
-    
     [SerializeField] private Button pg1NextButton;
     [SerializeField] private Button pg2NextButton;
     [SerializeField] private Button pg2BackButton;
     [SerializeField] private Button pg3BackButton;
 
-
-
-    private float malwareSpeed = 2;
-    private float malwareRadius = 0.5f;
-    private float timeDelay = 1.5f;
-    private float malwareHealth = 2;
+    private float malwareSpeed = Constants.INITIAL_MALWARE_SPEED;
+    private float malwareRadius = Constants.BASE_MALWARE_RADIUS;
+    private float timeDelay = Constants.TIME_BETWEEN_ENEMIES;
+    private float malwareHealth = Constants.INITIAL_MALWARE_HEALTH;
     private int enemiesSpawnedSinceLastIncrease = 0;
     private int enemyStatIncreaseCount = 0;
     bool paused = true;
-    Hacker hacker;
+    Hacker hacker; //one hacker object, gets reused
     bool hackerEnabled = false;
-
     bool easyMode = false;
     float easyModeSpawnDelayModifier = 1 / Constants.INITIAL_EASY_MODE_SPAWN_RATE_MODIFIER;
-
     private float enemySpawnCounter = 0;
     private float popUpRefreshCounter = 0;
-
-
     private List<MalwareScript> activeMalware = new List<MalwareScript>();
     private List<MalwareScript> inactiveMalware = new List<MalwareScript>();
-
     GameObject turret;
-
     System.Random rand = new System.Random();
-
     Player player;
 
     void Start()
@@ -83,7 +70,6 @@ public class Controller : MonoBehaviour
         hacker = Instantiate(hackerGO).GetComponent<Hacker>();
         hacker.SetActive(false);
         shopCanvas.GetComponent<Shop>().Init();
-
         pg1NextButton.onClick.AddListener(TutorialPg2);
         pg2NextButton.onClick.AddListener(TutorialPg3);
         pg2BackButton.onClick.AddListener(TutorialPg1);
@@ -107,7 +93,6 @@ public class Controller : MonoBehaviour
                 Pause();
             }
         }
-
 
         //spawn malware
         enemySpawnCounter -= Time.deltaTime;
@@ -135,6 +120,7 @@ public class Controller : MonoBehaviour
             }
         }
         popUpRefreshCounter -= Time.deltaTime;
+        return;
     }
 
     IEnumerator FlashTextOnScreen()
@@ -147,41 +133,40 @@ public class Controller : MonoBehaviour
         StopAllCoroutines(); //coroutines are not very efficient so want to make sure this one stops
     }
 
-
-    private void TutorialPg1()
+    private void TutorialPg1() //activate page one deactivate page 2
     {
         tutorialCanvasPg1.SetActive(true);
         tutorialImagePg1.SetActive(true);
-
         tutorialCanvasPg2.SetActive(false);
         tutorialImagePg2.SetActive(false);
+        return;
     }
 
-    private void TutorialPg2()
+    private void TutorialPg2() //activate page 2 and deactivate pages 1 and 3 (as both have a button that takes you to page 2)
     {
         tutorialCanvasPg1.SetActive(false);
         tutorialImagePg1.SetActive(false);
-
         tutorialCanvasPg2.SetActive(true);
         tutorialImagePg2.SetActive(true);
-
         tutorialCanvasPg3.SetActive(false);
         tutorialImagePg3.SetActive(false);
+        return;
     }
 
     private void TutorialPg3()
     {
         tutorialCanvasPg3.SetActive(true);
         tutorialImagePg3.SetActive(true);
-
         tutorialCanvasPg2.SetActive(false);
         tutorialImagePg2.SetActive(false);
+        return;
     }
 
     private void CloseTutorialEasyMode()
     {
         easyMode = true;
         CloseTutorial();
+        return;
     }
     private void CloseTutorial()
     {
@@ -190,11 +175,13 @@ public class Controller : MonoBehaviour
         player.setEasyMode(easyMode);
         StartCoroutine(FlashTextOnScreen());
         Resume();
+        return;
     }
 
     public void setHackerEnabled(bool x)
     {
         hackerEnabled = x;
+        return;
     }
 
     public bool getPaused()
@@ -214,6 +201,7 @@ public class Controller : MonoBehaviour
 
         shopCanvas.SetActive(true);
         hacker.setPaused(true);
+        return;
     }
 
     public void Resume()
@@ -228,12 +216,14 @@ public class Controller : MonoBehaviour
 
         shopCanvas.SetActive(false);
         hacker.setPaused(false);
+        return;
     }
 
     public void setMalwareAsInactive(MalwareScript mws)
     {
         activeMalware.Remove(mws);
         inactiveMalware.Add(mws);
+        return;
     }
 
     public void SpawnMalware(Vector3 spawnPos, bool spawnedByHacker, Color color)
@@ -325,7 +315,5 @@ public class Controller : MonoBehaviour
 
             return;
         }
-
-   
     }
 }

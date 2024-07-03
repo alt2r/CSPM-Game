@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,8 +5,6 @@ using System.IO;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System;
-using System.Threading;
-using UnityEditor.Rendering;
 
 public class Menu : MonoBehaviour
 {
@@ -25,27 +22,21 @@ public class Menu : MonoBehaviour
     {
         startGame.onClick.AddListener(StartGame);
         quit.onClick.AddListener(Quit);
-
         enterName.GetComponent<TMP_InputField>().onValueChanged.AddListener(OnTextChanged);
         PopulateLeaderboard();
+        return;
     }
 
     void StartGame()
     {
         playerName = enterName.GetComponent<TMP_InputField>().text;
         SceneManager.LoadSceneAsync(Constants.SceneNames.GameScene.ToString(), LoadSceneMode.Single);
-
-
         return;
     }
     void Quit()
     {
         Application.Quit();
-    }
-
-    void Update()
-    {
-        
+        return;
     }
 
     void OnTextChanged(string name)
@@ -54,6 +45,7 @@ public class Menu : MonoBehaviour
         {
             enterName.GetComponent<TMP_InputField>().text = name.Substring(0, 10);
         }
+        return;
     }
 
     void PopulateLeaderboard()
@@ -82,8 +74,7 @@ public class Menu : MonoBehaviour
             }
             leaderboard.text = textToAdd;
         }
-
-
+        return;
     }
 
     public static List<string[]> mergeSort(List<string[]> array)
@@ -142,6 +133,5 @@ public class Menu : MonoBehaviour
             }
         }
         return result;
-    }
-    
+    } 
 }

@@ -1,11 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class Hacker : MalwareScript
 {
-    // Start is called before the first frame update
     float counter = 0;
     bool paused;
     
@@ -14,7 +10,9 @@ public class Hacker : MalwareScript
         base.init(speed, Constants.HACKER_RADIUS, health, controller, color);
         transform.position = position;
         paused = false;
+        return;
     }
+
     void Update()
     {
         if(paused)
@@ -33,8 +31,8 @@ public class Hacker : MalwareScript
         {
             transform.position = new Vector2(Constants.HACKER_STOP_POINT, transform.position.y);
         }
+        return;
     }
-
 
     void SpawnMalware()
     {
@@ -69,10 +67,12 @@ public class Hacker : MalwareScript
     {
         gameObject.SetActive(false);
         controller.setHackerEnabled(false);
+        return;
     }
 
     public void setPaused(bool x)
     {
         paused = x;
+        return;
     }
 }

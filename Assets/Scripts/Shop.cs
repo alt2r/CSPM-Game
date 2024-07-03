@@ -1,12 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using UnityEngine.SceneManagement;
-using Unity.Mathematics;
-using System;
+
 public class Shop : MonoBehaviour
 {
     [SerializeField] Button weaponUpgradeButton;
@@ -15,11 +10,9 @@ public class Shop : MonoBehaviour
     [SerializeField] Button mainMenuButton;
     [SerializeField] GameObject firewallGO;
     [SerializeField] GameObject wiperGO;
-
     Player player;
     Upgrade weapon, barrier, screenwipe;
     bool wiper = false;
-
 
     public void Init()
     {
@@ -27,21 +20,20 @@ public class Shop : MonoBehaviour
         weaponUpgradeButton.onClick.AddListener(WeaponUpgrade);
         barrierUpgradeButton.onClick.AddListener(BarrierUpgrade);
         screenWipeButton.onClick.AddListener(ScreenWipe);
-
         mainMenuButton.onClick.AddListener(backToMenu);
-
         weapon = new Upgrade(weaponUpgradeButton, Constants.WEAPON_UPGRADE_COST, Constants.Upgrades.WEAPON, Constants.WEAPON_UPGRADE_TEXT, Constants.WEAPON_UPGRADE_SMALL_TEXT);
         barrier = new Upgrade(barrierUpgradeButton, Constants.BARRIER_COST, Constants.Upgrades.BARRIER, Constants.FIREWALL_TEXT, Constants.FIREWALL_SMALL_TEXT);
         screenwipe = new Upgrade(screenWipeButton, Constants.SCREEN_WIPE_COST, Constants.Upgrades.SCREENWIPE, Constants.SCREEN_WIPE_TEXT, Constants.SCREEN_WIPE_SMALL_TEXT);
+        return;
     }
 
     void OnEnable()
     {
         player = Player.GetInstance();
-        //int points = player.getSpendablePoints();
         weapon.refreshButton(player);
         barrier.refreshButton(player);
         screenwipe.refreshButton(player);
+        return;
     }
 
     public int getLowestCostForUpgrade()
@@ -72,9 +64,8 @@ public class Shop : MonoBehaviour
             default:
             break;
         }
-
-
         OnEnable();
+        return;
     }
 
     private void BarrierUpgrade()
@@ -94,29 +85,32 @@ public class Shop : MonoBehaviour
             default:
             break;
         }
-
         OnEnable();
+        return;
     }
 
     private void ScreenWipe()
     {
         screenwipe.DoUpgrade(player);
-        wiper = true;
+        wiper = true; //boolean to specify that we want to spawn the screen wiper when the shop is closed
         OnEnable();
+        return;
     }
 
-    void OnDisable()
+    void OnDisable() //instantiate the screen wiper when the shop is closed if it was bought
     {
         if(wiper)
         {
             wiper = false;
             Instantiate(wiperGO, new Vector2(Constants.SCREEN_WIPE_SPAWN_POINT, 0), new Quaternion(0, 0, 0, 0));
         }
+        return;
     }
 
     public void backToMenu()
     {
         SceneManager.LoadSceneAsync(Constants.SceneNames.MenuScene.ToString(), LoadSceneMode.Single);
+        return;
     }
 }
 

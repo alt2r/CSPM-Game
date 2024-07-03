@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 
 public class TurretScript : MonoBehaviour
@@ -8,20 +6,16 @@ public class TurretScript : MonoBehaviour
     GameObject currentBullet; //declared as global to save the shoot() method from having to allocate memory. shoot() was causing a lot of lag
     float momentum = 0;
     bool paused = false;
-    [SerializeField]
-    GameObject bulletGO;
-
+    [SerializeField] GameObject bulletGO;
     List<GameObject> inactiveBulletList = new List<GameObject>();
-
     Player player;
-
     float shootCountdown = 0; //counts down to 0
-
     float burstCooldown = 0;
     int burstShotsFired;
     void Start()
     {
         player = Player.GetInstance();
+        return;
     }
 
     void Update()
@@ -42,8 +36,6 @@ public class TurretScript : MonoBehaviour
             }
         
         }
-
-
         //movement
         if(Input.GetKey(KeyCode.DownArrow))
         {
@@ -62,7 +54,6 @@ public class TurretScript : MonoBehaviour
             momentum = Constants.PLAYER_MOVEMENT_INITIAL_SPEED;
             if(momentum < -Constants.PLAYER_MOVEMENT_FRICTION * Time.deltaTime) //friction + movement
             momentum += Constants.PLAYER_MOVEMENT_FRICTION * Time.deltaTime;
-            
         }
         else
         {
@@ -73,7 +64,6 @@ public class TurretScript : MonoBehaviour
             else
             momentum = 0;
         }
-
         if(!(momentum > 0 && transform.position.y > Constants.PLAYER_MOVEMENT_BOUNDRIES) && !(momentum < 0 && transform.position.y < -Constants.PLAYER_MOVEMENT_BOUNDRIES))
         {
             transform.Translate(new Vector2(0, momentum * Time.deltaTime));
@@ -92,7 +82,6 @@ public class TurretScript : MonoBehaviour
             momentum = 0;
         }
 
-
         if(Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
             if(shootCountdown <= 0)
@@ -100,24 +89,25 @@ public class TurretScript : MonoBehaviour
                 Shoot();
             }
         }
-
-        return;
-        
+        return;      
     }
 
     public void Pause()
     {
         paused = true;
+        return;
     }
 
     public void Resume()
     {
         paused = false;
+        return;
     }
 
     public void addToInactiveBulletList(GameObject b)
     {
         inactiveBulletList.Add(b);
+        return;
     }
     void Shoot()
     {
@@ -142,9 +132,6 @@ public class TurretScript : MonoBehaviour
                 currentBullet.GetComponent<BulletScript>().SetReferenceToTurretScript(this);
             } 
         }
-
-
-
         currentBullet.transform.position = new Vector2(transform.position.x + Constants.BULLET_SPAWN_OFFSET, transform.position.y);
         if(player.GetUpgradesDict()[Constants.Upgrades.WEAPON] == 3 && burstShotsFired < 1)
         {
@@ -154,12 +141,10 @@ public class TurretScript : MonoBehaviour
         else
         {
             burstShotsFired = 0;
-        }
-        
+        }  
         return;
-
     }
-
+    
     void shotgunShoot()
     {
         List<GameObject> bullets = new List<GameObject>();
@@ -183,7 +168,7 @@ public class TurretScript : MonoBehaviour
             currentBullet.transform.position = transform.position;
             thisBulletScript.setYMovement((i - 1) * Constants.SHOTGUN_SPREAD);
             bullets.Add(currentBullet);
-            }
+        }
+        return;
     }
-
 }

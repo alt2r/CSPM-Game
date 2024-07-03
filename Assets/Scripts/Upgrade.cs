@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -12,7 +9,7 @@ public class Upgrade
     int cost;
     Button button;
     Constants.Upgrades thisUpgrade;
-    
+
     public Upgrade(Button button, int cost, Constants.Upgrades thisUpgrade, string bigTextString, string smallTextString)
     {
         this.cost = cost;
@@ -37,8 +34,8 @@ public class Upgrade
         smallText.text = smallTextString;
         bigText.text = bigTextString;
         costText.text = Constants.COST_STRING + cost;
-
-    this.button = button;
+        this.button = button;
+        return;
     }
 
     public void DoUpgrade(Player player)
@@ -47,7 +44,7 @@ public class Upgrade
         cost *= Constants.UPGRADE_COST_INCREASE_MULTIPLIER;
         player.increaseValueInUpgradesDict(thisUpgrade);
         costText.text = Constants.COST_STRING + cost;
-
+        return;
     }
 
     public void refreshButton(Player player)
