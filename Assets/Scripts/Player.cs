@@ -26,6 +26,8 @@ public class Player
     private TMP_Text livesDisplay;
 
     private string playerName;
+
+    private bool easyMode;
     public Player(string playerName, TMP_Text pointsDisplay, TMP_Text livesDisplay)
     {
         lives = 5;
@@ -117,5 +119,15 @@ public class Player
     {
         spendablePoints -= spent;
         UpdatePointsDisplay();
+    }
+
+    public void setEasyMode(bool easyMode_)
+    {
+        easyMode = easyMode_;
+    }
+
+    public bool getEasyMode()
+    {
+        return easyMode;
     }
 }

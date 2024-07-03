@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using Unity.Mathematics;
+using System;
 public class Shop : MonoBehaviour
 {
     [SerializeField] Button weaponUpgradeButton;
@@ -19,8 +20,10 @@ public class Shop : MonoBehaviour
     Upgrade weapon, barrier, screenwipe;
     bool wiper = false;
 
-    void Awake()
+
+    public void Init()
     {
+        player = Player.GetInstance();
         weaponUpgradeButton.onClick.AddListener(WeaponUpgrade);
         barrierUpgradeButton.onClick.AddListener(BarrierUpgrade);
         screenWipeButton.onClick.AddListener(ScreenWipe);
@@ -30,7 +33,6 @@ public class Shop : MonoBehaviour
         weapon = new Upgrade(weaponUpgradeButton, Constants.WEAPON_UPGRADE_COST, Constants.Upgrades.WEAPON, Constants.WEAPON_UPGRADE_TEXT, Constants.WEAPON_UPGRADE_SMALL_TEXT);
         barrier = new Upgrade(barrierUpgradeButton, Constants.BARRIER_COST, Constants.Upgrades.BARRIER, Constants.FIREWALL_TEXT, Constants.FIREWALL_SMALL_TEXT);
         screenwipe = new Upgrade(screenWipeButton, Constants.SCREEN_WIPE_COST, Constants.Upgrades.SCREENWIPE, Constants.SCREEN_WIPE_TEXT, Constants.SCREEN_WIPE_SMALL_TEXT);
-
     }
 
     void OnEnable()
@@ -40,6 +42,17 @@ public class Shop : MonoBehaviour
         weapon.refreshButton(player);
         barrier.refreshButton(player);
         screenwipe.refreshButton(player);
+    }
+
+    public int getLowestCostForUpgrade()
+    {
+        int lowestCost;
+        lowestCost = weapon.getCost();
+        if(barrier.getCost() < lowestCost)
+        lowestCost = barrier.getCost();
+        if(screenwipe.getCost() < lowestCost)
+        lowestCost = screenwipe.getCost();
+        return lowestCost;
     }
 
     private void WeaponUpgrade()

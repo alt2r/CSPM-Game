@@ -20,11 +20,27 @@ public class Controller : MonoBehaviour
     [SerializeField] private GameObject shopCanvas;
     [SerializeField] private Button closeShop;
     [SerializeField] private Button openShop;
-    [SerializeField] private GameObject tutorialCanvas;
-    [SerializeField] private Button closeTutorialButton;
-    [SerializeField] private GameObject tutorialImage;
+    [SerializeField] private Button playGameHardButton;
+    [SerializeField] private Button playGameEasyButton;
     [SerializeField] private GameObject destroyAllIncomingMalware;
+    [SerializeField] private GameObject popUp;
 
+
+//not the most elegant looking solution, but multiple canvases is much more elegant than like 20 different components here
+//images seperated from canvases as otherwise the image sizes would scale incorrectly, something to do with build resolution being different
+//the build will always only run at fullscreen so this shouldnt cause any major issues, unsure how it would look on a different aspect ratio
+//this is a known issue with unity itself that they stated on a forum that they wont fix
+    [SerializeField] private GameObject tutorialCanvasPg1;
+    [SerializeField] private GameObject tutorialImagePg1;
+    [SerializeField] private GameObject tutorialCanvasPg2;
+    [SerializeField] private GameObject tutorialImagePg2;
+    [SerializeField] private GameObject tutorialCanvasPg3;
+    [SerializeField] private GameObject tutorialImagePg3;
+    
+    [SerializeField] private Button pg1NextButton;
+    [SerializeField] private Button pg2NextButton;
+    [SerializeField] private Button pg2BackButton;
+    [SerializeField] private Button pg3BackButton;
 
 
 
@@ -38,7 +54,12 @@ public class Controller : MonoBehaviour
     Hacker hacker;
     bool hackerEnabled = false;
 
-    private float counter = 0;
+    bool easyMode = false;
+    float easyModeSpawnDelayModifier = 1 / Constants.INITIAL_EASY_MODE_SPAWN_RATE_MODIFIER;
+
+    private float enemySpawnCounter = 0;
+    private float popUpRefreshCounter = 0;
+
 
     private List<MalwareScript> activeMalware = new List<MalwareScript>();
     private List<MalwareScript> inactiveMalware = new List<MalwareScript>();
@@ -47,22 +68,34 @@ public class Controller : MonoBehaviour
 
     System.Random rand = new System.Random();
 
+    Player player;
+
     void Start()
     {
         string playerName = Menu.GetPlayerName();
-        Player player = new Player(playerName, pointsDisplay, livesDisplay);
+        player = new Player(playerName, pointsDisplay, livesDisplay);
         playerNameDisplay.text = playerName;
         turret = Instantiate(turretGO, new Vector2(Constants.TURRET_SPAWN_POINT, 0), new Quaternion(0, 0, 0, 0));
         closeShop.onClick.AddListener(Resume);
         openShop.onClick.AddListener(Pause);
-        closeTutorialButton.onClick.AddListener(CloseTutorial);
+        playGameHardButton.onClick.AddListener(CloseTutorial);
+        playGameEasyButton.onClick.AddListener(CloseTutorialEasyMode);
         hacker = Instantiate(hackerGO).GetComponent<Hacker>();
         hacker.SetActive(false);
+        shopCanvas.GetComponent<Shop>().Init();
+
+        pg1NextButton.onClick.AddListener(TutorialPg2);
+        pg2NextButton.onClick.AddListener(TutorialPg3);
+        pg2BackButton.onClick.AddListener(TutorialPg1);
+        pg3BackButton.onClick.AddListener(TutorialPg2);
         return;
      }
 
     void Update()
     {
+        if(paused)
+        return;
+        //open shop if S or ESC is pressed
         if(Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.Escape))
         {
             if(paused)
@@ -77,23 +110,31 @@ public class Controller : MonoBehaviour
 
 
         //spawn malware
-        if(!paused)
+        enemySpawnCounter -= Time.deltaTime;
+        if(enemySpawnCounter <= 0)
         {
-            counter -= Time.deltaTime;
-            if(counter <= 0)
-            {
-                SpawnMalware(new Vector3(Constants.ENEMY_SPAWN_DISTANCE, rand.Next(-40, 40) / 10.0f, 0), false, new Color(rand.Next(3) * 0.45f, rand.Next(3) * 0.45f, rand.Next(3) * 0.45f));
-            }
+            SpawnMalware(new Vector3(Constants.ENEMY_SPAWN_DISTANCE, rand.Next(-40, 40) / 10.0f, 0), false, new Color(rand.Next(3) * 0.45f, rand.Next(3) * 0.45f, rand.Next(3) * 0.45f));
         }
 
-        //move malware (so that each malware doesnt need an update)
-        if(!paused)
+        //move malware here (so that each malware doesnt need an update)
+        foreach(MalwareScript malware in activeMalware)
         {
-            foreach(MalwareScript malware in activeMalware)
+            malware.Move();
+        }
+
+        if(popUpRefreshCounter <= 0) //no need to do this every frame
+        {
+            popUpRefreshCounter = 2; //constants
+            if(shopCanvas.GetComponent<Shop>().getLowestCostForUpgrade() < player.getSpendablePoints())
             {
-                malware.Move();
+                popUp.SetActive(true);
+            }
+            else
+            {
+                popUp.SetActive(false);
             }
         }
+        popUpRefreshCounter -= Time.deltaTime;
     }
 
     IEnumerator FlashTextOnScreen()
@@ -106,10 +147,47 @@ public class Controller : MonoBehaviour
         StopAllCoroutines(); //coroutines are not very efficient so want to make sure this one stops
     }
 
+
+    private void TutorialPg1()
+    {
+        tutorialCanvasPg1.SetActive(true);
+        tutorialImagePg1.SetActive(true);
+
+        tutorialCanvasPg2.SetActive(false);
+        tutorialImagePg2.SetActive(false);
+    }
+
+    private void TutorialPg2()
+    {
+        tutorialCanvasPg1.SetActive(false);
+        tutorialImagePg1.SetActive(false);
+
+        tutorialCanvasPg2.SetActive(true);
+        tutorialImagePg2.SetActive(true);
+
+        tutorialCanvasPg3.SetActive(false);
+        tutorialImagePg3.SetActive(false);
+    }
+
+    private void TutorialPg3()
+    {
+        tutorialCanvasPg3.SetActive(true);
+        tutorialImagePg3.SetActive(true);
+
+        tutorialCanvasPg2.SetActive(false);
+        tutorialImagePg2.SetActive(false);
+    }
+
+    private void CloseTutorialEasyMode()
+    {
+        easyMode = true;
+        CloseTutorial();
+    }
     private void CloseTutorial()
     {
-        tutorialCanvas.SetActive(false);
-        tutorialImage.SetActive(false);
+        tutorialCanvasPg3.SetActive(false);
+        tutorialImagePg3.SetActive(false);
+        player.setEasyMode(easyMode);
         StartCoroutine(FlashTextOnScreen());
         Resume();
     }
@@ -162,8 +240,7 @@ public class Controller : MonoBehaviour
     {
         MalwareScript malwareScript = null;
         Constants.SceneNames sceneNameAsEnum;
-        Enum.TryParse(SceneManager.GetActiveScene().name, out sceneNameAsEnum);
-        //basically this is just a much better way of doing while(scenename = "gamescene")
+        Enum.TryParse(SceneManager.GetActiveScene().name, out sceneNameAsEnum); //basically this is just a much better way of doing while(scenename = "gamescene")
         while(sceneNameAsEnum == Constants.SceneNames.GameScene)
         {
             int randnum;
@@ -238,7 +315,14 @@ public class Controller : MonoBehaviour
             if(!spawnedByHacker)
             enemiesSpawnedSinceLastIncrease++;
             
-            counter = timeDelay;
+            if(easyMode & easyModeSpawnDelayModifier > 1)
+            {
+                enemySpawnCounter = timeDelay * easyModeSpawnDelayModifier;
+                easyModeSpawnDelayModifier -= Constants.EASY_MODE_DIFFICULTY_INCREASE_PER_ENEMY;
+            }
+            else
+            enemySpawnCounter = timeDelay;
+
             return;
         }
 

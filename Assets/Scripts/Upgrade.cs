@@ -68,4 +68,9 @@ public class Upgrade
         return;
     }
 
+    public int getCost()
+    {
+        return cost;
+    }
+
 }

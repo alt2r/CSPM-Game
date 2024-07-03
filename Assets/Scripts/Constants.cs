@@ -58,7 +58,7 @@ public class Constants
     public const float HACKER_SPAWN_RATE = 3f;
     public const float HACKER_HEALTH = 3;
 
-public const string YOU_DIED_TEXT = "You Died! \n Name: ";
+public const string YOU_DIED_TEXT = "You Died!\nName: ";
 public const string SCORE_TEXT = "\nScore: ";
 public const string SCORES_FILE_PATH = "players.txt";
 public const string FIREWALL_G_O_NAME = "Firewall(Clone)";
@@ -81,6 +81,8 @@ public const string BIG_TEXT_NAME = "Big";
 public const string COST_TEXT_NAME = "Cost";
 public const string RIGHT_WALL_NAME = "rightWall";
 public const float BULLET_SPAWN_OFFSET = 0.35f;
+public const float INITIAL_EASY_MODE_SPAWN_RATE_MODIFIER = 0.4f;
+public const float EASY_MODE_DIFFICULTY_INCREASE_PER_ENEMY = 0.08f; 
 
 
 
