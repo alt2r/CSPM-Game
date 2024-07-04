@@ -10,9 +10,10 @@ public class Controller : MonoBehaviour
 {
     [SerializeField]private GameObject malwareGO;
     [SerializeField] private GameObject hackerGO;
-    [SerializeField]private TMP_Text pointsDisplay;
+    [SerializeField]private TMP_Text coinsDisplay;
     [SerializeField]private TMP_Text playerNameDisplay;
     [SerializeField]private TMP_Text livesDisplay;
+    [SerializeField] private TMP_Text scoreDisplay;
     [SerializeField] private GameObject turretGO;
     [SerializeField] private GameObject shopCanvas;
     [SerializeField] private Button closeShop;
@@ -60,7 +61,7 @@ public class Controller : MonoBehaviour
     void Start()
     {
         string playerName = Menu.GetPlayerName();
-        player = new Player(playerName, pointsDisplay, livesDisplay);
+        player = new Player(playerName, coinsDisplay, livesDisplay, scoreDisplay);
         playerNameDisplay.text = playerName;
         turret = Instantiate(turretGO, new Vector2(Constants.TURRET_SPAWN_POINT, 0), new Quaternion(0, 0, 0, 0));
         closeShop.onClick.AddListener(Resume);

@@ -1,5 +1,6 @@
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class Upgrade
 {
@@ -41,7 +42,7 @@ public class Upgrade
     public void DoUpgrade(Player player)
     {
         player.spendPoints(cost);
-        cost *= Constants.UPGRADE_COST_INCREASE_MULTIPLIER;
+        cost = (int)Math.Floor(cost * Constants.UPGRADE_COST_INCREASE_MULTIPLIER);
         player.increaseValueInUpgradesDict(thisUpgrade);
         costText.text = Constants.COST_STRING + cost;
         return;

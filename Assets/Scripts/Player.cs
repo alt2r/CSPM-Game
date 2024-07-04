@@ -14,18 +14,20 @@ public class Player
     };
     private float lives;
     private static Player instance;
-    private TMP_Text pointsDisplay;
+    private TMP_Text coinsDisplay;
     private TMP_Text livesDisplay;
+    private TMP_Text scoreDisplay;
     private string playerName;
     private bool easyMode;
-    public Player(string playerName, TMP_Text pointsDisplay, TMP_Text livesDisplay)
+    public Player(string playerName, TMP_Text coinsDisplay, TMP_Text livesDisplay, TMP_Text scoreDisplay)
     {
         lives = Constants.PLAYER_LIVES;
         fireRate = Constants.PLAYER_BASE_FIRE_RATE;
         instance = this;
-        this.pointsDisplay = pointsDisplay;
+        this.coinsDisplay = coinsDisplay;
         this.livesDisplay = livesDisplay;
         this.playerName = playerName;
+        this.scoreDisplay = scoreDisplay;
         UpdatePointsDisplay();
         UpdateLivesDisplay();
         return;
@@ -54,7 +56,11 @@ public class Player
 
     public void UpdatePointsDisplay()
     {
-        pointsDisplay.text = Constants.POINTS_DISPLAY_TEXT + spendablePoints;
+        coinsDisplay.text = Constants.COINS_DISPLAY_TEXT + spendablePoints;
+        if(easyMode)
+        scoreDisplay.text = Constants.SCORE_DISPLAY_TEXT + score;
+        else
+        scoreDisplay.text = Constants.SCORE_DISPLAY_TEXT + score * 2;
         return;
     }
 

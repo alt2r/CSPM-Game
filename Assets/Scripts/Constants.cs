@@ -4,7 +4,7 @@ public class Constants
     public const float COLLIDER_SIZE_MULTIPLIER = 1;
     public const float ENEMY_SPAWN_DISTANCE = 12;
     public const float PLAYER_LIVES = 5;
-    public const string POINTS_DISPLAY_TEXT = "points: ";
+    public const string COINS_DISPLAY_TEXT = "coins: ";
     public const string LIVES_DISPLAY_TEXT = "lives: ";
     public const string PLAYERS_FILE_NAME = "players.txt";
     public const float BULLET_SPEED = 10;
@@ -16,27 +16,29 @@ public class Constants
     public enum Upgrades{WEAPON, BARRIER, SCREENWIPE}
     public const float BURST_MODE_TIME_BETWEEN_SHOTS = 0.1f;
     public const float BURST_MODE_FIRE_RATE_MODIFIER = 0.8f;
-    public const float SHOTGUN_FIRE_RATE_MODIFIER = 0.65f;
+    public const float SHOTGUN_FIRE_RATE_MODIFIER = 0.7f;
     public const float SHOTGUN_SPREAD = 4f; 
-    public const string WEAPON_UPGRADE_TEXT = "Contingency planning";
+    public const string WEAPON_UPGRADE_TEXT = "Access Control";
     public const string WEAPON_UPGRADE_SMALL_TEXT = "Upgrades your weapon";
-    public const string FIREWALL_TEXT = "Firewall";
-    public const string FIREWALL_SMALL_TEXT = "A wall to block malware";
-    public const string SCREEN_WIPE_TEXT = "Patch management";
-    public const string SCREEN_WIPE_SMALL_TEXT = "Destroys all currently active malware";
+    public const string FIREWALL_TEXT = "Patch Management";
+    public const string FIREWALL_SMALL_TEXT = "Creates a barrier than slows down malware";
+    public const string SCREEN_WIPE_TEXT = "Firewall";
+    public const string SCREEN_WIPE_SMALL_TEXT = "Eliminates all malware currently on screen";
     public const string COST_STRING = "Cost: ";
     public const int BARRIER_COST = 10;
     public const int WEAPON_UPGRADE_COST = 15;
     public const int SCREEN_WIPE_COST = 10;
-    public const int UPGRADE_COST_INCREASE_MULTIPLIER = 2;
+    public const float UPGRADE_COST_INCREASE_MULTIPLIER = 1.75f;
     public const float TURRET_SPAWN_POINT = -5.09f;
     public const float FIRE_RATE_INCREASE_MODIFIER = 1.33f;
-    public const float FAST_ENEMY_SPEED_MULTIPLIER = 1.33f;
+    public const float FAST_ENEMY_SPEED_MULTIPLIER = 1.4f;
     public const float FAST_ENEMY_HEALTH_MULTIPLIER = 0.5f;
-    public const float STRONG_ENEMY_HEALTH_MULTIPLIER = 2f;
+    public const float STRONG_ENEMY_HEALTH_MULTIPLIER = 1.66f;
     public const float STRONG_ENEMY_SPEED_MULTIPLIER = 0.5f;
     public const float STRONG_ENEMY_RADIUS_MODIFIER = 1.5f;
     public const float ENEMY_GRADUAL_SPEED_INCREASE = 0.35f;
+    public const float ENEMY_TOP_SPEED = 4.5f;
+    public const float ENEMY_SPEED_INCREASE_AFTER_TOP_SPEED = 0.02f;
     public const float ENEMY_DAMAGE = 1;
     public const float BULLET_DAMAGE = 1;
     public const string BULLET_TAG = "Bullet";
@@ -75,8 +77,9 @@ public class Constants
     public const float EASY_MODE_DIFFICULTY_INCREASE_PER_ENEMY = 0.08f; 
     public const float INITIAL_MALWARE_SPEED = 2;
     public const float BASE_MALWARE_RADIUS = 0.5f;
-    public const float TIME_BETWEEN_ENEMIES = 1.5f;
+    public const float TIME_BETWEEN_ENEMIES = 1.4f;
     public const float INITIAL_MALWARE_HEALTH = 2f;
     public const float POINT_AT_WHICH_MALWARE_HAS_REACHED_BASE = 0.8f; //as a fraction of the base's width so 1 = as soon as it touches
     public const float PLAYER_BASE_FIRE_RATE = 4;
+    public const string SCORE_DISPLAY_TEXT = "Score: ";
 }
