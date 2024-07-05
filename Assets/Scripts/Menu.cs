@@ -52,7 +52,8 @@ public class Menu : MonoBehaviour
     {
         if(!File.Exists(Constants.PLAYERS_FILE_NAME))
         {
-            return;
+            File.Create(Constants.PLAYERS_FILE_NAME); 
+            leaderboard.text = "";
         }
         using(StreamReader sr = new StreamReader(Constants.PLAYERS_FILE_NAME))
         {
