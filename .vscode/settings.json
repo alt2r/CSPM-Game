@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "CSPM-Game.sln"
+    "dotnet.defaultSolution": "cspm-defender.sln"
 }
