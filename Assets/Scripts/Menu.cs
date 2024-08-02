@@ -12,6 +12,7 @@ public class Menu : MonoBehaviour
     [SerializeField] GameObject enterName;
     [SerializeField] TMP_Text leaderboard;
     [SerializeField] Button quit;
+    [SerializeField] GameObject enterNameErrorMessage;
     static string playerName = "";
 
     public static string GetPlayerName()
@@ -30,7 +31,16 @@ public class Menu : MonoBehaviour
     void StartGame()
     {
         playerName = enterName.GetComponent<TMP_InputField>().text;
-        SceneManager.LoadSceneAsync(Constants.SceneNames.GameScene.ToString(), LoadSceneMode.Single);
+        if (playerName != "")
+        {
+            enterNameErrorMessage.SetActive(false);
+            //load the game scene and close this one
+            SceneManager.LoadSceneAsync(Constants.SceneNames.GameScene.ToString(), LoadSceneMode.Single);
+        }
+        else
+        {
+            enterNameErrorMessage.SetActive(true);
+        }
         return;
     }
     void Quit()
@@ -41,21 +51,23 @@ public class Menu : MonoBehaviour
 
     void OnTextChanged(string name)
     {
-        if(name.Length > 10)
+        //cool funciton that does not allow names longer than Constants.PLAYER_NAME_MAXIMUM_LENGTH characters (currently 15)
+        //when the user enters the 16th character it will replace that string with the first 15 chars of that string
+        if (name.Length > Constants.PLAYER_NAME_MAXIMUM_LENGTH)
         {
-            enterName.GetComponent<TMP_InputField>().text = name.Substring(0, 10);
+            enterName.GetComponent<TMP_InputField>().text = name.Substring(0, Constants.PLAYER_NAME_MAXIMUM_LENGTH);
         }
         return;
     }
 
     void PopulateLeaderboard()
     {
-        if(!File.Exists(Constants.PLAYERS_FILE_NAME))
+        if (!File.Exists(Constants.PLAYERS_FILE_NAME))
         {
-            File.Create(Constants.PLAYERS_FILE_NAME); 
+            File.Create(Constants.PLAYERS_FILE_NAME);
             leaderboard.text = "";
         }
-        using(StreamReader sr = new StreamReader(Constants.PLAYERS_FILE_NAME))
+        using (StreamReader sr = new StreamReader(Constants.PLAYERS_FILE_NAME))
         {
             string? line;
             string[] splitString;
@@ -87,7 +99,7 @@ public class Menu : MonoBehaviour
         {
             return array;
         }
-        int midPoint = array.Count / 2;;
+        int midPoint = array.Count / 2; ;
         for (int i = 0; i < midPoint; i++)
         {
             left.Add(array[i]);
@@ -108,7 +120,7 @@ public class Menu : MonoBehaviour
         List<string[]> result = new List<string[]>();
         int indexLeft = 0, indexRight = 0;
         while (indexLeft < left.Count || indexRight < right.Count)
-        {  
+        {
             if (indexLeft < left.Count && indexRight < right.Count)
             {
                 if (Convert.ToInt32(left[indexLeft][1]) <= Convert.ToInt32(right[indexRight][1]))
@@ -134,5 +146,5 @@ public class Menu : MonoBehaviour
             }
         }
         return result;
-    } 
+    }
 }

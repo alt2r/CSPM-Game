@@ -37,7 +37,7 @@ public class TurretScript : MonoBehaviour
         
         }
         //movement
-        if(Input.GetKey(KeyCode.DownArrow))
+        if(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
         {
             if(momentum > -Constants.PLAYER_MOVEMENT_TOP_SPEED)
             momentum -= Constants.PLAYER_MOVEMENT_ACCELERATION * Time.deltaTime;
@@ -46,7 +46,7 @@ public class TurretScript : MonoBehaviour
             if(momentum > Constants.PLAYER_MOVEMENT_FRICTION * Time.deltaTime)
             momentum -= Constants.PLAYER_MOVEMENT_FRICTION * Time.deltaTime;
         }
-        else if(Input.GetKey(KeyCode.UpArrow))
+        else if(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
         {
             if(momentum < Constants.PLAYER_MOVEMENT_TOP_SPEED)
             momentum += Constants.PLAYER_MOVEMENT_ACCELERATION * Time.deltaTime;
